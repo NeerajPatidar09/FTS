@@ -1,5 +1,8 @@
 git add a.txt / git add . / git add *.txt
 
 git commit
- .
- hi 
+git commit - m <message> 
+git status
+git diff
+git log
+git show <id><filename>
