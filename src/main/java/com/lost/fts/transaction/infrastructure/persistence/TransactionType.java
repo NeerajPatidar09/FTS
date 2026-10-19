@@ -2,13 +2,13 @@ package com.lost.fts.transaction.infrastructure.persistence;
 
 public enum TransactionType {
     TRANSFER,
-    CASH_DEPOSIT,
-    CASH_WITHDRAWAL,
-    CARD_PAYMENT,
+    CASHDEPOSIT,
+    CASHWITHDRAWAL,
+    CARDPAYMENT,
     PURCHASE,
     REFUND,
     FEE,
-    LOAN_REPAYMENT,
+    LOANREPAYMENT,
     REVERSAL,
     OTHER
 }

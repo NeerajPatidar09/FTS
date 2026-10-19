@@ -191,13 +191,13 @@ public class AlertEntity {
         }
 
         this.assignedTo = actor.trim();
-        this.status = AlertStatus.UNDER_INVESTIGATION;
+        this.status = AlertStatus.UNDERINVESTIGATION;
     }
 
     public void escalate() {
         if (status != AlertStatus.NEW
                 && status != AlertStatus.ACKNOWLEDGED
-                && status != AlertStatus.UNDER_INVESTIGATION) {
+                && status != AlertStatus.UNDERINVESTIGATION) {
             throw new IllegalStateException(
                     "Alert cannot be escalated from status " + status);
         }
@@ -210,7 +210,7 @@ public class AlertEntity {
             String actor,
             Instant resolvedAt) {
 
-        if (status != AlertStatus.UNDER_INVESTIGATION
+        if (status != AlertStatus.UNDERINVESTIGATION
                 && status != AlertStatus.ESCALATED) {
             throw new IllegalStateException(
                     "Only investigated or escalated alerts can be resolved");
@@ -234,7 +234,7 @@ public class AlertEntity {
             String actor,
             Instant resolvedAt) {
 
-        if (status != AlertStatus.UNDER_INVESTIGATION
+        if (status != AlertStatus.UNDERINVESTIGATION
                 && status != AlertStatus.ESCALATED) {
             throw new IllegalStateException(
                     "Only investigated or escalated alerts can be marked false positive");
@@ -250,12 +250,12 @@ public class AlertEntity {
         this.resolutionCode = resolutionCode.trim();
         this.resolvedBy = actor.trim();
         this.resolvedAt = resolvedAt;
-        this.status = AlertStatus.FALSE_POSITIVE;
+        this.status = AlertStatus.FALSEPOSITIVE;
     }
 
     public void close() {
         if (status != AlertStatus.RESOLVED
-                && status != AlertStatus.FALSE_POSITIVE) {
+                && status != AlertStatus.FALSEPOSITIVE) {
             throw new IllegalStateException(
                     "Only resolved or false-positive alerts can be closed");
         }
@@ -265,7 +265,7 @@ public class AlertEntity {
 
     private void ensureOpenForWork() {
         if (status == AlertStatus.RESOLVED
-                || status == AlertStatus.FALSE_POSITIVE
+                || status == AlertStatus.FALSEPOSITIVE
                 || status == AlertStatus.CLOSED) {
             throw new IllegalStateException(
                     "A resolved or closed alert cannot be reassigned");

@@ -39,7 +39,7 @@ public class AccountEntity {
 
     // Many accounts can belong to one customer.
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "customerid", nullable = false, foreignKey = @ForeignKey(name = "fk_accounts_customer"))
+    @JoinColumn(name = "customerid", nullable = false, foreignKey = @ForeignKey(name = "fkaccountscustomer"))
     private CustomerEntity customer;
 
     @Enumerated(EnumType.STRING)

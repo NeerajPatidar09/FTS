@@ -16,9 +16,9 @@ import jakarta.persistence.Version;
 
 @Entity 
 @Table(name = "rules", uniqueConstraints = {
-        @UniqueConstraint(name = "uk_rules_rule_code", columnNames = "rule_code")
+        @UniqueConstraint(name = "ukrulesrulecode", columnNames = "rulecode")
 }, indexes = {
-        @Index(name = "idx_rules_domain_status", columnList = "domain, status")
+        @Index(name = "idxrulesdomainstatus", columnList = "domain, status")
 })
 public class RuleEntity {
 
@@ -26,7 +26,7 @@ public class RuleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "rule_code", nullable = false, length = 100)
+    @Column(name = "rulecode", nullable = false, length = 100)
     private String ruleCode;
 
     @Column(nullable = false, length = 150)
@@ -43,17 +43,17 @@ public class RuleEntity {
     @Column(nullable = false, length = 20)
     private RuleStatus status = RuleStatus.DISABLED;
 
-    @Column(name = "created_by", nullable = false, length = 100)
+    @Column(name = "createdby", nullable = false, length = 100)
     private String createdBy;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "createdat", nullable = false, updatable = false)
     private Instant createdAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updatedat", nullable = false)
     private Instant updatedAt;
 
     @Version
-    @Column(name = "row_version", nullable = false)
+    @Column(name = "rowversion", nullable = false)
     private Long rowVersion;
 
     public Long getId() {

@@ -8,7 +8,7 @@ public enum TransactionChannel {
     CARD,
     ATM,
     CASH,
-    BANK_TRANSFER,
+    BANKTRANSFER,
     WALLET,
     OTHER
 }

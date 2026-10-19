@@ -38,7 +38,7 @@ public class BeneficiaryEntity {
 
     // The account that owns this saved beneficiary.
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "accountid", nullable = false, foreignKey = @ForeignKey(name = "fk_beneficiaries_account"))
+    @JoinColumn(name = "accountid", nullable = false, foreignKey = @ForeignKey(name = "fkbeneficiariesaccount"))
     private AccountEntity account;
 
     @Column(name = "beneficiaryname", nullable = false, length = 150)

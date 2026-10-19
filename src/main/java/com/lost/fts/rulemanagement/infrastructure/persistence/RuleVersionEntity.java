@@ -146,11 +146,11 @@ public class RuleVersionEntity {
             );
         }
 
-        status = RuleVersionStatus.PENDING_APPROVAL;
+        status = RuleVersionStatus.PENDINGAPPROVAL;
     }
 
     public void approve(String approver, Instant approvedAt) {
-        if (status != RuleVersionStatus.PENDING_APPROVAL) {
+        if (status != RuleVersionStatus.PENDINGAPPROVAL) {
             throw new IllegalStateException(
                 "Only pending versions can be approved"
             );
@@ -175,7 +175,7 @@ public class RuleVersionEntity {
     }
 
     public void reject() {
-        if (status != RuleVersionStatus.PENDING_APPROVAL) {
+        if (status != RuleVersionStatus.PENDINGAPPROVAL) {
             throw new IllegalStateException(
                 "Only pending versions can be rejected"
             );
