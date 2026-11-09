@@ -1,6 +1,7 @@
 package com.lost.fts.user.api;
 
 import com.lost.fts.user.api.request.UserCreateRequest;
+import com.lost.fts.user.api.request.UserRoleRequest;
 import com.lost.fts.user.api.response.UserResponse;
 import com.lost.fts.user.application.UserService;
 
@@ -46,5 +47,13 @@ public class UserController {
     public void disableUser(@PathVariable Long id) {
 
         userService.disableUser(id);
+    }
+
+    @PutMapping("/{id}/roles")
+    public UserResponse assignRoles(
+            @PathVariable Long id,
+            @Valid @RequestBody UserRoleRequest request) {
+
+        return userService.assignRoles(id, request);
     }
 }

@@ -1,9 +1,10 @@
 package com.lost.fts.user.application;
 
 import com.lost.fts.user.api.request.UserCreateRequest;
+import com.lost.fts.user.api.request.UserRoleRequest;
 import com.lost.fts.user.api.response.UserResponse;
 import com.lost.fts.user.infrastructure.persistence.User;
-import com.lost.fts.user.infrastructure.persistence.UserRepository;
+import com.lost.fts.role.infrastructure.persistence.Role;
 import com.lost.fts.user.infrastructure.persistence.UserStatus;
 import com.lost.fts.employee.infrastructure.persistence.Employee;
 import com.lost.fts.employee.infrastructure.persistence.EmployeeRepository;
@@ -11,7 +12,8 @@ import com.lost.fts.employee.infrastructure.persistence.EmployeeStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+import com.lost.fts.user.infrastructure.persistence.UserRepository;
+import com.lost.fts.role.infrastructure.persistence.RoleRepository;
 import java.util.List;
 
 @Service
@@ -21,16 +23,16 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final EmployeeRepository employeeRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
-    public UserServiceImpl(
-            UserRepository userRepository,
-            EmployeeRepository employeeRepository,
-            PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder,
+        RoleRepository roleRepository) {
 
-        this.userRepository = userRepository;
-        this.employeeRepository = employeeRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    this.userRepository = userRepository;
+    this.employeeRepository = employeeRepository;
+    this.passwordEncoder = passwordEncoder;
+    this.roleRepository = roleRepository;
+}
 
     // CREATE USER
     @Override
@@ -146,5 +148,34 @@ public class UserServiceImpl implements UserService {
                 user.getEmail(),
                 user.getStatus().name(),
                 user.isAccountLocked());
+    }
+
+    @Override
+    public UserResponse assignRoles(
+            Long userId,
+            UserRoleRequest request) {
+
+        User user = userRepository
+                .findWithRolesAndPermissionsById(userId)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "User not found"));
+
+        List<Role> roles = roleRepository.findAllById(
+                request.roleIds());
+
+        if (roles.size() != request.roleIds().size()) {
+            throw new IllegalArgumentException(
+                    "One or more roles do not exist");
+        }
+
+        if (roles.stream().anyMatch(role -> !role.isActive())) {
+            throw new IllegalArgumentException(
+                    "Inactive roles cannot be assigned");
+        }
+
+        user.getRoles().clear();
+        user.getRoles().addAll(roles);
+
+        return mapToResponse(userRepository.save(user));
     }
 }

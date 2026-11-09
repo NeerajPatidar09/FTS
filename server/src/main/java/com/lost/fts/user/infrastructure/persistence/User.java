@@ -3,6 +3,9 @@ package com.lost.fts.user.infrastructure.persistence;
 import com.lost.fts.employee.infrastructure.persistence.Employee;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import com.lost.fts.role.infrastructure.persistence.Role;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
@@ -47,6 +50,11 @@ public class User {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"), uniqueConstraints = @UniqueConstraint(columnNames = {
+            "user_id", "role_id" }))
+    private Set<Role> roles = new HashSet<>();
 
     @PrePersist
     public void onCreate() {
@@ -149,5 +157,13 @@ public class User {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public Set<Role> getRoles() {
+    return roles;
+}
+
+public void setRoles(Set<Role> roles) {
+    this.roles = roles;
+}
 
 }
