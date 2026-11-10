@@ -22,31 +22,17 @@ public class CustomUserDetails implements UserDetails {
     public CustomUserDetails(User user) {
 
         this.user = user;
-
-        Set<GrantedAuthority> grantedAuthorities =
-                new HashSet<>();
-
+        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         for (Role role : user.getRoles()) {
-
             if (!role.isActive()) {
                 continue;
             }
 
-            grantedAuthorities.add(
-                    new SimpleGrantedAuthority(
-                            "ROLE_" + role.getRoleCode()
-                    )
-            );
+            grantedAuthorities.add(new SimpleGrantedAuthority("ROLES_" + role.getRoleCode()));
 
             for (Permission permission : role.getPermissions()) {
-
                 if (permission.isActive()) {
-
-                    grantedAuthorities.add(
-                            new SimpleGrantedAuthority(
-                                    permission.getPermissionCode()
-                            )
-                    );
+                    grantedAuthorities.add(new SimpleGrantedAuthority(permission.getPermissionCode()));
                 }
             }
         }

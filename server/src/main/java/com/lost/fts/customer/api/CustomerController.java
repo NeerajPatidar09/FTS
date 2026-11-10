@@ -14,6 +14,7 @@ import com.lost.fts.customer.api.request.CustomerCreateRequest;
 import com.lost.fts.customer.api.response.CustomerResponse;
 import com.lost.fts.customer.application.CustomerService;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/v1/customers")

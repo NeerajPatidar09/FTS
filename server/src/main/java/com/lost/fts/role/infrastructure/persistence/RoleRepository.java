@@ -9,12 +9,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface RoleRepository extends JpaRepository<Role, Long> {
 
     Optional<Role> findByRoleCode(String roleCode);
-
     boolean existsByRoleCode(String roleCode);
-
+    @EntityGraph(attributePaths = "menus")
+    Optional<Role> findWithMenusById(Long id);
     @EntityGraph(attributePaths = "permissions")
     Optional<Role> findWithPermissionsById(Long id);
-
     @EntityGraph(attributePaths = "permissions")
     List<Role> findAll();
 }

@@ -17,16 +17,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-@Transactional(readOnly = true)
-public UserDetails loadUserByUsername(String username)
-        throws UsernameNotFoundException {
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String username)
+            throws UsernameNotFoundException {
 
-    User user = userRepository
-            .findWithRolesAndPermissionsByUsernameIgnoreCase(username)
-            .orElseThrow(() ->
-                    new UsernameNotFoundException(
-                            "User not found"));
+        User user = userRepository
+                .findWithRolesAndPermissionsByUsernameIgnoreCase(username)
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        "User not found"));
 
-    return new CustomUserDetails(user);
-}
+        return new CustomUserDetails(user);
+    }
 }

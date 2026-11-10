@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import com.lost.fts.permission.infrastructure.persistence.Permission;
 import java.util.HashSet;
 import java.util.Set;
+import com.lost.fts.menu.infrastructure.persistence.Menu;
 
 @Entity
 @Table(name = "roles", uniqueConstraints = {
@@ -25,6 +26,11 @@ public class Role {
     @JoinTable(name = "role_permissions", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"), uniqueConstraints = @UniqueConstraint(columnNames = {
             "role_id", "permission_id" }))
     private Set<Permission> permissions = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "role_menus", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "menu_id"), uniqueConstraints = @UniqueConstraint(columnNames = {
+            "role_id", "menu_id" }))
+    private Set<Menu> menus = new HashSet<>();
 
     private String roleName;
 
@@ -87,4 +93,13 @@ public class Role {
     public void setPermissions(Set<Permission> permissions) {
         this.permissions = permissions;
     }
+
+    public Set<Menu> getMenus() {
+        return menus;
+    }
+
+    public void setMenus(Set<Menu> menus) {
+        this.menus = menus;
+    }
+
 }
