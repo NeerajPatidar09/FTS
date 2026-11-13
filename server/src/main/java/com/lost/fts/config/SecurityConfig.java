@@ -31,9 +31,7 @@ public class SecurityConfig {
         private final CustomUserDetailsService userDetailsService;
         private final PasswordEncoder passwordEncoder;
 
-        public SecurityConfig(
-                        JwtAuthenticationFilter jwtFilter,
-                        CustomUserDetailsService userDetailsService,
+        public SecurityConfig(JwtAuthenticationFilter jwtFilter, CustomUserDetailsService userDetailsService,
                         PasswordEncoder passwordEncoder) {
 
                 this.jwtFilter = jwtFilter;
@@ -42,48 +40,22 @@ public class SecurityConfig {
         }
 
         @Bean
-        public SecurityFilterChain securityFilterChain(
-                        HttpSecurity http) throws Exception {
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-                http
-                                .csrf(csrf -> csrf.disable())
-
-                                .cors(cors -> cors.configurationSource(
-                                                corsConfigurationSource()))
-
-                                .sessionManagement(session -> session.sessionCreationPolicy(
-                                                SessionCreationPolicy.STATELESS))
-
+                http.csrf(csrf -> csrf.disable()).cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                                .sessionManagement(session -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                                 .authenticationProvider(authenticationProvider())
+                                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/auth/login").permitAll()
+                                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll().anyRequest()
+                                                .authenticated())
+                                .exceptionHandling(ex -> ex.authenticationEntryPoint((request, response, exception) -> {
+                                        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                                        response.setContentType("application/json");
+                                        response.getWriter().write("{\"message\":\"Authentication required\"}");
+                                }))
 
-                                .authorizeHttpRequests(auth -> auth
-
-                                                .requestMatchers(
-                                                                "/api/v1/auth/login")
-                                                .permitAll()
-
-                                                .requestMatchers(
-                                                                HttpMethod.OPTIONS, "/**")
-                                                .permitAll()
-
-                                                .anyRequest().authenticated())
-
-                                .exceptionHandling(ex -> ex
-                                                .authenticationEntryPoint(
-                                                                (request, response, exception) -> {
-                                                                        response.setStatus(
-                                                                                        HttpStatus.UNAUTHORIZED
-                                                                                                        .value());
-                                                                        response.setContentType(
-                                                                                        "application/json");
-                                                                        response.getWriter().write(
-                                                                                        "{\"message\":\"Authentication required\"}");
-                                                                }))
-
-                                .addFilterBefore(
-                                                jwtFilter,
-                                                UsernamePasswordAuthenticationFilter.class);
-
+                                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
                 return http.build();
         }
 
@@ -95,10 +67,7 @@ public class SecurityConfig {
         }
 
         @Bean
-        public AuthenticationManager authenticationManager(
-                        AuthenticationConfiguration configuration)
-                        throws Exception {
-
+        public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
                 return configuration.getAuthenticationManager();
         }
 
@@ -106,25 +75,12 @@ public class SecurityConfig {
         public CorsConfigurationSource corsConfigurationSource() {
 
                 CorsConfiguration configuration = new CorsConfiguration();
-
-                configuration.setAllowedOrigins(
-                                List.of("http://localhost:5173"));
-
-                configuration.setAllowedMethods(
-                                List.of(
-                                                "GET", "POST", "PUT",
-                                                "PATCH", "DELETE", "OPTIONS"));
-
-                configuration.setAllowedHeaders(
-                                List.of("Authorization", "Content-Type"));
-
+                configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+                configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+                configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
                 configuration.setAllowCredentials(false);
-
                 UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-                source.registerCorsConfiguration(
-                                "/**", configuration);
-
+                source.registerCorsConfiguration("/**", configuration);
                 return source;
         }
 }

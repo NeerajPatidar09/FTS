@@ -24,19 +24,14 @@ public class MenuController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('MENU_MANAGE')")
-    public MenuResponse createMenu(
-            @Valid @RequestBody MenuCreateRequest request) {
-
+    public MenuResponse createMenu(@Valid @RequestBody MenuCreateRequest request) {
         return menuService.createMenu(request);
     }
 
     // UPDATE MENU
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('MENU_MANAGE')")
-    public MenuResponse updateMenu(
-            @PathVariable Long id,
-            @Valid @RequestBody MenuUpdateRequest request) {
-
+    public MenuResponse updateMenu(@PathVariable Long id, @Valid @RequestBody MenuUpdateRequest request) {
         return menuService.updateMenu(id, request);
     }
 
@@ -44,7 +39,6 @@ public class MenuController {
     @GetMapping
     @PreAuthorize("hasAuthority('MENU_VIEW')")
     public List<MenuResponse> getAllMenus() {
-
         return menuService.getAllMenus();
     }
 
@@ -53,7 +47,6 @@ public class MenuController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('MENU_MANAGE')")
     public void deactivateMenu(@PathVariable Long id) {
-
         menuService.deactivateMenu(id);
     }
 
@@ -61,10 +54,7 @@ public class MenuController {
     @PutMapping("/roles/{roleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('MENU_MANAGE')")
-    public void assignMenusToRole(
-            @PathVariable Long roleId,
-            @Valid @RequestBody RoleMenuRequest request) {
-
+    public void assignMenusToRole(@PathVariable Long roleId, @Valid @RequestBody RoleMenuRequest request) {
         menuService.assignMenusToRole(roleId, request);
     }
 }

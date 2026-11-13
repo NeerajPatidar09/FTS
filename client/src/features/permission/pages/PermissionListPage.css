@@ -1,0 +1,384 @@
+
+/* Permission Management */
+
+.permission-page {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  color: #20232a;
+}
+
+/* Header */
+
+.permission-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.permission-page-header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #20232a;
+}
+
+.permission-page-header p {
+  margin-top: 8px;
+  color: #858b98;
+  font-size: 13px;
+}
+
+.permission-refresh-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 11px 17px;
+  background: #fff;
+  color: #454b56;
+  border: 1px solid #e5e8ee;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.permission-refresh-btn:hover {
+  background: #f4f7fb;
+}
+
+.permission-refresh-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Summary Cards */
+
+.permission-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 17px;
+  margin-bottom: 25px;
+}
+
+.permission-summary-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #e8ebf0;
+  border-radius: 12px;
+}
+
+.permission-summary-icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.permission-summary-icon.blue {
+  background: #eaf2ff;
+  color: #3978d3;
+}
+
+.permission-summary-icon.green {
+  background: #e5f7ed;
+  color: #24965a;
+}
+
+.permission-summary-icon.purple {
+  background: #f1eaff;
+  color: #8656c7;
+}
+
+.permission-summary-icon.orange {
+  background: #fff1df;
+  color: #d78a27;
+}
+
+.permission-summary-card h3 {
+  font-size: 23px;
+  font-weight: 700;
+  color: #20232a;
+}
+
+.permission-summary-card p {
+  margin-top: 5px;
+  color: #858b98;
+  font-size: 11px;
+}
+
+/* Toolbar */
+
+.permission-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 20px;
+}
+
+.permission-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 350px;
+  height: 43px;
+  padding: 0 13px;
+  background: #fff;
+  border: 1px solid #e5e8ee;
+  border-radius: 9px;
+  color: #858b98;
+}
+
+.permission-search:focus-within {
+  border-color: #6b94cc;
+  box-shadow: 0 0 0 3px rgba(59,130,246,.08);
+}
+
+.permission-search input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13px;
+  color: #303642;
+}
+
+.permission-search input::placeholder {
+  color: #a0a6b1;
+}
+
+.permission-group-filter {
+  min-width: 220px;
+  height: 43px;
+  padding: 0 13px;
+  border: 1px solid #e5e8ee;
+  border-radius: 9px;
+  background: #fff;
+  color: #555d6b;
+  outline: none;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.permission-group-filter:focus {
+  border-color: #6b94cc;
+}
+
+/* Table */
+
+.permission-table-container {
+  width: 100%;
+  overflow-x: auto;
+  background: #fff;
+  border: 1px solid #e7eaf0;
+  border-radius: 13px;
+}
+
+.permission-table {
+  width: 100%;
+  min-width: 800px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.permission-table thead {
+  background: #f8f9fb;
+}
+
+.permission-table th {
+  padding: 16px 20px;
+  color: #737b89;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #e9ebef;
+}
+
+.permission-table td {
+  padding: 15px 20px;
+  font-size: 12px;
+  color: #525a68;
+  border-bottom: 1px solid #f0f1f4;
+  vertical-align: middle;
+}
+
+.permission-table tbody tr:hover {
+  background: #f9fbfe;
+}
+
+.permission-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Permission Name */
+
+.permission-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 190px;
+}
+
+.permission-icon {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  background: #edf3ff;
+  color: #3978d3;
+  border-radius: 9px;
+  flex-shrink: 0;
+}
+
+.permission-name-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.permission-name-info strong {
+  color: #252a34;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.permission-name-info span {
+  color: #9ba1ac;
+  font-size: 10px;
+}
+
+/* Permission Code */
+
+.permission-code {
+  display: inline-block;
+  padding: 6px 9px;
+  background: #f2f4f7;
+  color: #555e6c;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Description */
+
+.permission-description {
+  min-width: 200px;
+  line-height: 1.5;
+}
+
+/* Status */
+
+.permission-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.permission-status.active {
+  background: #e8f7ef;
+  color: #21965b;
+}
+
+.permission-status.inactive {
+  background: #fff0f0;
+  color: #d34b4b;
+}
+
+.permission-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Results heading */
+
+.permission-results-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 13px;
+}
+
+.permission-results-heading h3 {
+  font-size: 15px;
+  color: #252a34;
+}
+
+.permission-results-heading span {
+  font-size: 11px;
+  color: #9298a4;
+}
+
+.permission-table-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 5px;
+  color: #9298a4;
+  font-size: 11px;
+}
+
+.permission-empty,
+.permission-message {
+  padding: 40px 20px;
+  text-align: center;
+  color: #858b98;
+  font-size: 13px;
+}
+
+.permission-error {
+  color: #d34b4b;
+}
+
+/* Responsive */
+
+@media (max-width: 1100px) {
+  .permission-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .permission-page-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .permission-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .permission-search,
+  .permission-group-filter {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .permission-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .permission-page-header h1 {
+    font-size: 21px;
+  }
+
+  .permission-table th,
+  .permission-table td {
+    padding: 13px;
+  }
+}

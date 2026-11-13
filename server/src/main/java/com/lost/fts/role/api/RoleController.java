@@ -20,9 +20,7 @@ public class RoleController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public RoleResponse createRole(
-            @Valid @RequestBody RoleCreateRequest request) {
-
+    public RoleResponse createRole(@Valid @RequestBody RoleCreateRequest request) {
         return roleService.createRole(request);
     }
 
@@ -37,10 +35,7 @@ public class RoleController {
     }
 
     @PutMapping("/{id}/permissions")
-    public RoleResponse assignPermissions(
-            @PathVariable Long id,
-            @Valid @RequestBody RolePermissionRequest request) {
-
+    public RoleResponse assignPermissions(@PathVariable Long id, @Valid @RequestBody RolePermissionRequest request) {
         return roleService.assignPermissions(id, request);
     }
 

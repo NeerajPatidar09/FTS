@@ -23,15 +23,12 @@ public class DepartmentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public DepartmentResponse create(
-            @Valid @RequestBody DepartmentCreateRequest request) {
+    public DepartmentResponse create(@Valid @RequestBody DepartmentCreateRequest request) {
         return service.create(request);
     }
 
     @PutMapping("/{id}")
-    public DepartmentResponse update(
-            @PathVariable Long id,
-            @Valid @RequestBody DepartmentCreateRequest request) {
+    public DepartmentResponse update(@PathVariable Long id, @Valid @RequestBody DepartmentCreateRequest request) {
         return service.update(id, request);
     }
 

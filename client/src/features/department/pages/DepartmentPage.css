@@ -1,0 +1,677 @@
+
+/* ==========================================
+   DEPARTMENT MANAGEMENT LIST
+========================================== */
+
+.department-page,
+.department-form-page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 30px;
+  color: #20232a;
+}
+
+/* Header */
+
+.department-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.department-page-header h1,
+.department-form-heading h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #20232a;
+}
+
+.department-page-header p,
+.department-form-heading p {
+  margin-top: 8px;
+  color: #858b98;
+  font-size: 13px;
+}
+
+.department-header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Buttons */
+
+.department-refresh-btn,
+.department-create-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.department-refresh-btn {
+  background: #fff;
+  border: 1px solid #e2e6ec;
+  color: #555d6b;
+}
+
+.department-refresh-btn:hover {
+  background: #f5f7fa;
+}
+
+.department-create-btn {
+  background: #17191f;
+  color: #fff;
+  border: 1px solid #17191f;
+}
+
+.department-create-btn:hover {
+  background: #343943;
+}
+
+.department-refresh-btn:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+/* Success */
+
+.department-success-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 15px;
+  margin-bottom: 18px;
+  background: #e8f7ef;
+  color: #21965b;
+  border: 1px solid #c8ecd8;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.department-success-message button {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Error */
+
+.department-error-message {
+  padding: 13px 15px;
+  margin-bottom: 18px;
+  background: #fff1f1;
+  color: #cb4444;
+  border: 1px solid #ffd9d9;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.department-error-message button {
+  margin-left: 12px;
+  border: none;
+  background: transparent;
+  color: #cb4444;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Summary */
+
+.department-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 17px;
+  margin-bottom: 25px;
+}
+
+.department-summary-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #e8ebf0;
+  border-radius: 12px;
+}
+
+.department-summary-icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.department-summary-icon.blue {
+  background: #eaf2ff;
+  color: #3978d3;
+}
+
+.department-summary-icon.green {
+  background: #e5f7ed;
+  color: #24965a;
+}
+
+.department-summary-icon.orange {
+  background: #fff1df;
+  color: #d78a27;
+}
+
+.department-summary-card h3 {
+  font-size: 23px;
+  font-weight: 700;
+}
+
+.department-summary-card p {
+  margin-top: 5px;
+  color: #858b98;
+  font-size: 11px;
+}
+
+/* Toolbar */
+
+.department-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 22px;
+}
+
+.department-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 350px;
+  height: 43px;
+  padding: 0 13px;
+  background: #fff;
+  border: 1px solid #e5e8ee;
+  border-radius: 9px;
+  color: #858b98;
+}
+
+.department-search:focus-within {
+  border-color: #6b94cc;
+}
+
+.department-search input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #303642;
+  font-size: 12px;
+}
+
+.department-status-filter {
+  min-width: 160px;
+  height: 43px;
+  padding: 0 12px;
+  background: #fff;
+  border: 1px solid #e5e8ee;
+  border-radius: 9px;
+  color: #555d6b;
+  outline: none;
+  font-size: 12px;
+}
+
+/* Table Heading */
+
+.department-results-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 13px;
+}
+
+.department-results-heading h3 {
+  font-size: 15px;
+  color: #252a34;
+}
+
+.department-results-heading span {
+  color: #9298a4;
+  font-size: 11px;
+}
+
+/* Table */
+
+.department-table-container {
+  width: 100%;
+  overflow-x: auto;
+  background: #fff;
+  border: 1px solid #e7eaf0;
+  border-radius: 13px;
+}
+
+.department-table {
+  width: 100%;
+  min-width: 750px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.department-table thead {
+  background: #f8f9fb;
+}
+
+.department-table th {
+  padding: 16px 20px;
+  color: #737b89;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #e9ebef;
+}
+
+.department-table td {
+  padding: 15px 20px;
+  color: #525a68;
+  font-size: 12px;
+  border-bottom: 1px solid #f0f1f4;
+  vertical-align: middle;
+}
+
+.department-table tbody tr:hover {
+  background: #f9fbfe;
+}
+
+.department-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Department Name */
+
+.department-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.department-icon {
+  width: 37px;
+  height: 37px;
+  display: grid;
+  place-items: center;
+  background: #edf3ff;
+  color: #3978d3;
+  border-radius: 9px;
+}
+
+.department-name-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.department-name-info strong {
+  color: #252a34;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.department-name-info span {
+  color: #9298a4;
+  font-size: 10px;
+}
+
+/* Code */
+
+.department-code {
+  display: inline-block;
+  padding: 6px 9px;
+  background: #f2f4f7;
+  color: #555e6c;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Status */
+
+.department-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.department-status.active {
+  background: #e8f7ef;
+  color: #21965b;
+}
+
+.department-status.inactive {
+  background: #fff0f0;
+  color: #d34b4b;
+}
+
+.department-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Actions */
+
+.department-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.department-edit-btn,
+.department-deactivate-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.department-edit-btn {
+  color: #3978d3;
+  background: #edf3ff;
+  border: 1px solid #dce8ff;
+}
+
+.department-edit-btn:hover {
+  background: #dce9ff;
+}
+
+.department-deactivate-btn {
+  color: #d34b4b;
+  background: #fff1f1;
+  border: 1px solid #ffdada;
+}
+
+.department-deactivate-btn:hover {
+  background: #ffe2e2;
+}
+
+.department-deactivate-btn:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+/* Footer */
+
+.department-table-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 5px;
+  color: #9298a4;
+  font-size: 11px;
+}
+
+.department-empty,
+.department-message {
+  padding: 40px 20px;
+  text-align: center;
+  color: #858b98;
+  font-size: 13px;
+}
+
+/* ==========================================
+   CREATE / EDIT DEPARTMENT
+========================================== */
+
+.department-form-page {
+  max-width: 1100px;
+}
+
+.department-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 25px;
+  color: #3978d3;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.department-back-link:hover {
+  color: #245ba8;
+}
+
+.department-form-heading {
+  margin-bottom: 25px;
+}
+
+.department-form-card {
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e5e8ee;
+  border-radius: 13px;
+}
+
+.department-form-card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 24px 25px;
+  margin: 0 25px;
+  border-bottom: 1px solid #edf0f3;
+}
+
+.department-form-icon {
+  width: 45px;
+  height: 45px;
+  display: grid;
+  place-items: center;
+  background: #eaf2ff;
+  color: #3978d3;
+  border-radius: 10px;
+}
+
+.department-form-card-header h2 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #252a34;
+}
+
+.department-form-card-header p {
+  margin-top: 6px;
+  color: #9298a4;
+  font-size: 11px;
+}
+
+.department-form-card-body {
+  padding: 25px;
+}
+
+.department-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.department-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 0;
+}
+
+.department-form-field label {
+  color: #303642;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.department-form-field label span {
+  color: #e05252;
+}
+
+.department-form-field input {
+  width: 100%;
+  height: 43px;
+  box-sizing: border-box;
+  padding: 12px 13px;
+  background: #fff;
+  border: 1px solid #dce2eb;
+  border-radius: 8px;
+  outline: none;
+  color: #303642;
+  font-size: 12px;
+}
+
+.department-form-field input:focus {
+  border-color: #6b94cc;
+  box-shadow: 0 0 0 3px rgba(59,130,246,.08);
+}
+
+.department-form-field input::placeholder {
+  color: #a0a6b1;
+}
+
+.department-form-field small {
+  color: #9298a4;
+  font-size: 10px;
+}
+
+.department-form-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px 25px;
+  border-top: 1px solid #edf0f3;
+}
+
+.department-reset-btn,
+.department-submit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 43px;
+  padding: 0 18px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.department-reset-btn {
+  background: #fff;
+  border: 1px solid #dce2eb;
+  color: #555d6b;
+}
+
+.department-reset-btn:hover {
+  background: #f4f6f9;
+}
+
+.department-submit-btn {
+  background: #17191f;
+  border: 1px solid #17191f;
+  color: #fff;
+}
+
+.department-submit-btn:hover {
+  background: #343943;
+}
+
+.department-reset-btn:disabled,
+.department-submit-btn:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.department-spinner {
+  animation: department-spin 1s linear infinite;
+}
+
+@keyframes department-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+  .department-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 650px) {
+  .department-page-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .department-header-actions {
+    width: 100%;
+  }
+
+  .department-header-actions button {
+    flex: 1;
+  }
+
+  .department-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .department-search,
+  .department-status-filter {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .department-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .department-form-card-header {
+    margin: 0 15px;
+    padding: 18px 0;
+  }
+
+  .department-form-card-body {
+    padding: 18px 15px;
+  }
+
+  .department-form-footer {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 450px) {
+  .department-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .department-form-footer {
+    flex-wrap: wrap;
+  }
+
+  .department-reset-btn,
+  .department-submit-btn {
+    flex: 1;
+  }
+}
