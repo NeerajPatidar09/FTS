@@ -11,4 +11,5 @@ public interface PermissionRepository
             String permissionCode);
 
     boolean existsByPermissionCode(String permissionCode);
+    long count();
 }

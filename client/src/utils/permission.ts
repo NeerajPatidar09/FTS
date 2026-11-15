@@ -1,4 +1,3 @@
-
 import type { LoginResponse } from "../features/auth/types/auth.user.types";
 
 // Check whether the user has a particular permission

@@ -195,6 +195,17 @@ export default function AppRoutes() {
             />
           </Route>
 
+          {/* Create Permission */}
+
+          {/* <Route element={
+            <PermissionRoute permissions={["PERMISSION_ASSIGN"]} />
+          }>
+            <Route
+              path="/permissions/create"
+              element={<CustomerPermissionPage />}
+            />
+          </Route> */}
+
 
           {/* Menu Management */}
 

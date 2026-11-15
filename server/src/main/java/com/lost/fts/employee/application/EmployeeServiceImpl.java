@@ -67,7 +67,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 employee.setFirstName(request.firstName());
                 employee.setLastName(request.lastName());
                 employee.setEmail(request.email());
-                employee.setPhoneNumber(request.phoneNumber());
+                employee.setPhoneNumber(request.phone());
                 employee.setDepartment(department);
                 employee.setDesignation(designation);
                 employee.setJoiningDate(request.joiningDate());
@@ -138,7 +138,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 employee.setFirstName(request.firstName());
                 employee.setLastName(request.lastName());
                 employee.setEmail(request.email());
-                employee.setPhoneNumber(request.phoneNumber());
+                employee.setPhoneNumber(request.phone());
                 employee.setDepartment(department);
                 employee.setDesignation(designation);
                 employee.setJoiningDate(request.joiningDate());

@@ -32,9 +32,9 @@ export default function Sidebar({
     useState<Record<number, boolean>>({});
 
   const employeeName =
-  auth?.user?.employeeName ||
-  auth?.user?.username ||
-  "User";
+    auth?.user?.employeeName ||
+    auth?.user?.username ||
+    "User";
 
   // Filter menus using backend permissions
   const visibleMenus = filterMenusByPermission(
@@ -65,7 +65,7 @@ export default function Sidebar({
     );
 
     const isExpanded = expandedMenus[menu.id] ?? isChildActive;
-    const isActive = menu.menuPath === location.pathname;
+    // const isActive = menu.menuPath === location.pathname;
 
     // Parent menu with children
     if (hasChildren) {
@@ -75,9 +75,8 @@ export default function Sidebar({
 
           <button
             type="button"
-            className={`dynamic-menu-parent ${
-              isChildActive ? "active-parent" : ""
-            }`}
+            className={`dynamic-menu-parent ${isChildActive ? "active-parent" : ""
+              }`}
             onClick={() => toggleMenu(menu.id)}
             title={collapsed ? menu.menuName : undefined}
             aria-expanded={isExpanded}
@@ -125,8 +124,7 @@ export default function Sidebar({
           onClick={onNavigate}
           title={collapsed ? menu.menuName : undefined}
           className={({ isActive }) =>
-            `navigation-link ${
-              isActive ? "active" : ""
+            `navigation-link ${isActive ? "active" : ""
             }`
           }
         >
@@ -147,9 +145,8 @@ export default function Sidebar({
   return (
 
     <aside
-      className={`sidebar ${
-        collapsed ? "collapsed" : ""
-      } ${mobileOpen ? "mobile-open" : ""}`}
+      className={`sidebar ${collapsed ? "collapsed" : ""
+        } ${mobileOpen ? "mobile-open" : ""}`}
     >
 
       {/* Brand */}
@@ -204,21 +201,21 @@ export default function Sidebar({
             <div className="sidebar-user-info">
               <strong>{employeeName}</strong>
               <span>
-                {auth?.roles?.[0] ?? "User"}
+                {auth?.user?.roles?.[0] ?? "User"}
               </span>
             </div>
           )}
 
-        
 
-        <button
-          className="sidebar-logout"
-          onClick={logout}
-        >
 
-          <LogOut size={18} />
+          <button
+            className="sidebar-logout"
+            onClick={logout}
+          >
 
-        </button>
+            <LogOut size={18} />
+
+          </button>
         </div>
 
       </div>

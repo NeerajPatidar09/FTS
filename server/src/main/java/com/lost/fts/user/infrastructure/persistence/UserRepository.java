@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.EntityGraph;
 import java.util.List;
 import java.util.Optional;
+import com.lost.fts.user.infrastructure.persistence.UserStatus;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
@@ -28,4 +29,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "roles.menus.parent.requiredPermission"
     })
     Optional<User> findWithRolesAndPermissionsByUsernameIgnoreCase(String username);
+
+    long count();
+
+    long countByStatus(UserStatus status);
+
 }

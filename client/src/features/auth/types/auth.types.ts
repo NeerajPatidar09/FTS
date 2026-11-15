@@ -26,8 +26,6 @@ export interface LoginResponse {
   accessToken: string;
   tokenType: string;
   expiresIn: number;
-
   user: AuthUser;
-
   menus: MenuResponse[];
 }

@@ -18,6 +18,7 @@ import {
   BuildingComplexPlus,
   Building,
   ShieldPlus,
+  ListPlusIcon,
 } from "lucide-react";
 
 import type { LucideIcon } from "lucide-react";
@@ -40,6 +41,7 @@ const menuIconMap: Record<string, LucideIcon> = {
   "building-complex-plus":BuildingComplexPlus,
   "building":Building,
   "shield-plus":ShieldPlus,
+  "list-plus":ListPlusIcon,
 };
 
 export const getMenuIcon = (

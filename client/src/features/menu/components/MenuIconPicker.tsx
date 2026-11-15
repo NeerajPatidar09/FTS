@@ -18,6 +18,8 @@ import {
   Building,
   Folder,
   FileText,
+  ListPlusIcon,
+
 } from "lucide-react";
 
 interface MenuIconPickerProps {
@@ -45,20 +47,10 @@ const iconMap = {
   building: Building,
   folder: Folder,
   "file-text": FileText,
+  "list-plus":ListPlusIcon,
 } as const;
 
-export default function MenuIconPicker({
-  iconName,
-  size = 19,
-}: MenuIconPickerProps) {
-
-  const Icon = iconName
-    ? iconMap[iconName as keyof typeof iconMap]
-    : undefined;
-
-  return Icon ? (
-    <Icon size={size} />
-  ) : (
-    <Folder size={size} />
-  );
+export default function MenuIconPicker({iconName, size = 19,}: MenuIconPickerProps) {
+  const Icon = iconName ? iconMap[iconName as keyof typeof iconMap] : undefined;
+  return Icon ? ( <Icon size={size} /> ) : ( <Folder size={size} />);
 }

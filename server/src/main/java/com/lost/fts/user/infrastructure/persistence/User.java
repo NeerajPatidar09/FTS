@@ -39,6 +39,9 @@ public class User {
     @Column(name = "account_locked", nullable = false)
     private boolean accountLocked = false;
 
+    @Column(name = "isenabled", nullable = false)
+    private boolean isEnabled = true;
+
     @Column(name = "failed_login_attempts")
     private int failedLoginAttempts = 0;
 
@@ -165,5 +168,15 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
+    }
+
+    
 
 }

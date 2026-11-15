@@ -14,8 +14,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     Optional<Employee> findByEmployeeCode(String employeeCode);
 
     Page<Employee> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmployeeCodeContainingIgnoreCase(
-            String firstName,
-            String lastName,
-            String employeeCode,
-            Pageable pageable);
+            String firstName, String lastName, String employeeCode, Pageable pageable);
+
+    long count();
+
+    long countByStatus(EmployeeStatus status);
 }

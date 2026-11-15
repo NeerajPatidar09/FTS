@@ -17,8 +17,9 @@ public record EmployeeCreateRequest(
     @NotBlank
     @Email
     String email,
-
-    String phoneNumber,
+    
+    @NotBlank @Pattern(regexp = "^[0-9+() -]{7,20}$")
+    String phone,
 
     @NotNull
     Long departmentId,

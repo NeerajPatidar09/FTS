@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/v1/employees")
@@ -24,6 +25,7 @@ public class EmployeeController {
 
     // Create employee
     @PostMapping
+    @PreAuthorize("hasAuthority('EMPLOYEE_CREATE')")
     @ResponseStatus(HttpStatus.CREATED)
     public EmployeeResponse createEmployee(@Valid @RequestBody EmployeeCreateRequest request) {
         return employeeService.createEmployee(request);
@@ -31,17 +33,20 @@ public class EmployeeController {
 
     // Get all employees
     @GetMapping
+    @PreAuthorize("hasAuthority('EMPLOYEE_VIEW')")
     public List<EmployeeResponse> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
 
     // Get employee by ID
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('EMPLOYEE_VIEW')")
     public EmployeeResponse getEmployeeById(@PathVariable Long id) {
         return employeeService.getEmployeeById(id);
     }
 
     // Update employee
+    @PreAuthorize("hasAuthority('EMPLOYEE_UPDATE')")
     @PutMapping("/{id}")
     public EmployeeResponse updateEmployee(@PathVariable Long id, @Valid @RequestBody EmployeeCreateRequest request) {
         return employeeService.updateEmployee(id, request);
@@ -51,10 +56,12 @@ public class EmployeeController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEmployee(@PathVariable Long id) {
-        employeeService.deleteEmployee(id);}
+        employeeService.deleteEmployee(id);
+    }
 
     @GetMapping("/search")
-    public Page<EmployeeResponse> searchEmployees( @RequestParam(defaultValue = "") String keyword,
+    @PreAuthorize("hasAuthority('EMPLOYEE_UPDATE')")
+    public Page<EmployeeResponse> searchEmployees(@RequestParam(defaultValue = "") String keyword,
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy, @RequestParam(defaultValue = "desc") String direction) {
         if (page < 0 || size < 1 || size > 100) {
@@ -66,10 +73,12 @@ public class EmployeeController {
             throw new IllegalArgumentException("Invalid sort field");
         }
 
-        Sort.Direction sortDirection = direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : null;
+        Sort.Direction sortDirection = direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC
+                : direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : null;
 
         if (sortDirection == null) {
-            throw new IllegalArgumentException("Invalid sort direction");}
+            throw new IllegalArgumentException("Invalid sort direction");
+        }
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
         return employeeService.searchEmployees(keyword, pageable);

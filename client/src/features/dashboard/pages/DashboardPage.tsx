@@ -5,7 +5,6 @@ import {
   Bell,
   Search,
   UserRound,
-  ShieldCheck,
   Activity,
 } from "lucide-react";
 
