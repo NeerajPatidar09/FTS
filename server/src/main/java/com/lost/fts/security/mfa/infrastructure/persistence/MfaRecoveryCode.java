@@ -13,9 +13,12 @@ public class MfaRecoveryCode {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_mfa_id", nullable = false)
-    private UserMfa userMfa;
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "user_mfa_id", nullable = false)
+    // private UserMfa userMfa;
+
+    @Column(name = "user_mfa_id", nullable = false)
+    private Long userMfaId;
 
     @Column(name = "code_hash", nullable = false, length = 64)
     private String codeHash;
@@ -41,12 +44,20 @@ public class MfaRecoveryCode {
         return id;
     }
 
-    public UserMfa getUserMfa() {
-        return userMfa;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setUserMfa(UserMfa userMfa) {
-        this.userMfa = userMfa;
+    public Long getUserMfaId() {
+        return userMfaId;
+    }
+
+    public void setUserMfaId(Long userMfaId) {
+        this.userMfaId = userMfaId;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
     }
 
     public String getCodeHash() {

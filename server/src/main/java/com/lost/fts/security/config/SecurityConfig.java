@@ -46,11 +46,14 @@ public class SecurityConfig {
                                 .sessionManagement(session -> session
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                                 .authenticationProvider(authenticationProvider())
-                                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/auth/login",
-                                                "/api/v1/auth/verify-mfa",
-                                                "/api/v1/auth/refresh",
-                                                "/api/v1/auth/logout").permitAll()
-                                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll().anyRequest()
+                                .authorizeHttpRequests(auth -> auth
+                                                .requestMatchers("/api/v1/auth/login", "/api/v1/auth/verify-mfa",
+                                                                "/api/v1/auth/verify-mfa-recovery",
+                                                                "/api/v1/auth/refresh")
+                                                .permitAll()
+                                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                                                .requestMatchers("/api/v1/auth/mfa/**")
+                                                .authenticated().anyRequest()
                                                 .authenticated())
                                 .exceptionHandling(ex -> ex.authenticationEntryPoint((request, response, exception) -> {
                                         response.setStatus(HttpStatus.UNAUTHORIZED.value());

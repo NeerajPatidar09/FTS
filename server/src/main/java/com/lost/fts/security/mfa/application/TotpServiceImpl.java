@@ -35,15 +35,18 @@ public class TotpServiceImpl implements TotpService {
                 if (code == null || !code.matches("\\d{6}")) {
                         return OptionalLong.empty();
                 }
-
+                
                 long currentStep = Instant.now().getEpochSecond() / 30;
                 long lastUsed = lastUsedTimeStep == null ? -1 : lastUsedTimeStep;
+                System.out.println("lastUsed ::::: " + lastUsed + " currentStep :::::" + currentStep + "  code: : : "
+                                + code + "  lastUsedTimeStep::: " + lastUsedTimeStep);
                 for (long step = currentStep - 1; step <= currentStep + 1; step++) {
 
                         if (step <= lastUsed) {
                                 continue;
                         }
                         String expected = generateCode(secret, step);
+                        System.out.println("expected ::::: " + expected);
                         if (java.security.MessageDigest.isEqual(
                                         expected.getBytes(java.nio.charset.StandardCharsets.US_ASCII),
                                         code.getBytes(java.nio.charset.StandardCharsets.US_ASCII))) {

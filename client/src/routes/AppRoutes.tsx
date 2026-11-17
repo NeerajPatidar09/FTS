@@ -10,6 +10,7 @@ import RoleListPage from "../features/role/pages/RoleListPage";
 import CustomerPermissionPage from "../features/permission/pages/PermissionCreatePage";
 import PermissionListPage from "../features/permission/pages/PermissionListPage";
 import LoginPage from "../features/auth/pages/LoginPage";
+import VerifyMfaPage from "../features/auth/pages/VerifyMfaPage";
 import DashboardPage from "../features/dashboard/pages/DashboardPage";
 import CustomerListPage from "../features/customer/pages/CustomerListPage";
 import MainLayout from "../components/layout/MainLayout";
@@ -35,6 +36,7 @@ export default function AppRoutes() {
       <Route element={<PublicRoute />}>
         <Route path="/" element={<LoginPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/verify-mfa" element={<VerifyMfaPage />} />
       </Route>
 
       {/* Unauthorized page */}

@@ -7,4 +7,6 @@ public interface AuthenticationService {
     LoginResult login(LoginRequest request);
 
     LoginResult completeMfaLogin(String challengeToken, String code);
+
+    LoginResult completeRecoveryLogin(String challengeToken, String recoveryCode);
 }

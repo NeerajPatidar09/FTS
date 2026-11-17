@@ -1,6 +1,6 @@
 package com.lost.fts.security.authentication.api.response;
-import com.lost.fts.security.authentication.api.response.LoginResponse;
 
+import com.lost.fts.security.authentication.api.response.LoginResponse;
 public record LoginResult(
         boolean mfaRequired,
         String challengeToken,

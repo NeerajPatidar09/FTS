@@ -67,6 +67,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
                 CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
                 User user = userRepository.findByUsernameIgnoreCase(userDetails.getUsername()).orElseThrow();
+                UserDetails userDetails1 = customUserDetailsService.loadUserByUsername(user.getUsername());
+                String accessToken = jwtService.generateToken(userDetails1);
+                System.out.println("accessToken ::::::: " + accessToken);
                 UserMfa mfa = userMfaRepository.findByUserId(user.getId()).orElse(null);
                 if (mfa != null && mfa.isEnabled() && mfa.isVerified()) {
                         String challenge = mfaChallengeService.createChallenge(user.getId());
@@ -119,31 +122,47 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                                 currentUser,
                                 menuService.getAccessibleMenus(user));
 
-                return LoginResult.authenticated(
-                                response,
-                                refreshToken);
+                return LoginResult.authenticated(response, refreshToken);
         }
 
         @Override
-        public LoginResult completeMfaLogin(
-                        String challengeToken,
-                        String code) {
+        public LoginResult completeMfaLogin(String challengeToken, String code) {
 
                 MfaVerificationResult result = mfaLoginService.verify(challengeToken, code);
 
                 if (!result.verified()) {
-                        throw new BadCredentialsException(
-                                        "Invalid or expired authentication challenge");
+                        throw new BadCredentialsException("Invalid or expired authentication challenge");
                 }
 
                 User user = userRepository.findById(result.userId())
-                                .orElseThrow(() -> new BadCredentialsException(
-                                                "Invalid authentication challenge"));
+                                .orElseThrow(() -> new BadCredentialsException("Invalid authentication challenge"));
 
                 if (!user.isEnabled()) {
                         throw new DisabledException("Account is disabled");
                 }
 
+                return issueTokens(user);
+        }
+
+        @Override
+        public LoginResult completeRecoveryLogin(String challengeToken, String recoveryCode) {
+
+                MfaVerificationResult result = mfaLoginService.verifyRecoveryCode(challengeToken, recoveryCode);
+
+                if (!result.verified()) {
+                        throw new BadCredentialsException("Invalid or expired authentication challenge");
+                }
+
+                User user = userRepository.findById(result.userId())
+                                .orElseThrow(() -> new BadCredentialsException("Invalid authentication challenge"));
+
+                if (!user.isEnabled()) {
+                        throw new DisabledException("Account is disabled");
+                }
+
+                // Issue a normal authenticated session.
+                // Do not disable MFA automatically.
+                // Notify the user that a recovery code was used.
                 return issueTokens(user);
         }
 }

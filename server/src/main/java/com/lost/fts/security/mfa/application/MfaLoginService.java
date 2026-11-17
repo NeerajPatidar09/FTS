@@ -4,7 +4,6 @@ import com.lost.fts.security.mfa.api.response.MfaVerificationResult;
 
 public interface MfaLoginService {
 
-    MfaVerificationResult verify(
-            String challengeToken,
-            String code);
+    MfaVerificationResult verify(String challengeToken,String code);
+    MfaVerificationResult verifyRecoveryCode(String challengeToken, String recoveryCode);
 }

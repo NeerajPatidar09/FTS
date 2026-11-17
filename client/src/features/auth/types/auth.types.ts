@@ -22,10 +22,43 @@ export interface AuthUser {
   permissions: string[];
 }
 
-export interface LoginResponse {
+// export interface LoginResponse {
+//   accessToken: string;
+//   tokenType: string;
+//   expiresIn: number;
+//   user: AuthUser;
+//   menus: MenuResponse[];
+// }
+
+// new functionally 
+
+
+export interface LoginRequest {
+  username: string;
+  password: string;
+}
+
+export interface MfaRequiredResponse {
+  mfaRequired: true;
+  challengeToken: string;
+  expiresIn: number;
+  message: string;
+}
+
+export interface LoginSuccessResponse {
   accessToken: string;
   tokenType: string;
   expiresIn: number;
-  user: AuthUser;
+  userId: number;
+  employeeId: number;
+  username: string;
+  email: string;
+  employeeName: string;
+  roles: string[];
+  permissions: string[];
   menus: MenuResponse[];
 }
+
+export type LoginResponse =
+  | LoginSuccessResponse
+  | MfaRequiredResponse;
