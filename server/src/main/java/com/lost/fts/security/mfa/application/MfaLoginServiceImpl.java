@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.OptionalLong;
 import com.lost.fts.security.mfa.infrastructure.persistence.MfaRecoveryCodeRepository;
-import com.lost.fts.security.mfa.application.MfaRecoveryCodeGenerator;
-
 @Service
 public class MfaLoginServiceImpl implements MfaLoginService {
 

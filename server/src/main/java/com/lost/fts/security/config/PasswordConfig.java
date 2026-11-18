@@ -1,4 +1,4 @@
-package com.lost.fts.config;
+package com.lost.fts.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

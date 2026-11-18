@@ -10,7 +10,9 @@ public record CustomerResponse(
     String firstName,
     String lastName,
     String fullName,
-    String email,
+    // String maskedPan,
+    // String maskedPhone,
+    String maskedEmail,
     CustomerStatus status,
     Instant createdAt,
     Instant updatedAt

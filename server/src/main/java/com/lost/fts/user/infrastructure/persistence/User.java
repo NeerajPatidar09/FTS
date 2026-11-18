@@ -65,6 +65,9 @@ public class User {
             "user_id", "role_id" }))
     private Set<Role> roles = new HashSet<>();
 
+    @Column(name = "password_changed_at")
+    private LocalDateTime passwordChangedAt;
+
     @PrePersist
     public void onCreate() {
         createdAt = LocalDateTime.now();
@@ -197,6 +200,14 @@ public class User {
 
     public void setLastFailedLoginAt(LocalDateTime lastFailedLoginAt) {
         this.lastFailedLoginAt = lastFailedLoginAt;
+    }
+
+    public LocalDateTime getPasswordChangedAt() {
+        return passwordChangedAt;
+    }
+
+    public void setPasswordChangedAt(LocalDateTime passwordChangedAt) {
+        this.passwordChangedAt = passwordChangedAt;
     }
 
 }

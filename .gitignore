@@ -1,4 +1,3 @@
-application-dev.properties
 .env
 .env.local
 .env.development.local
@@ -8,3 +7,93 @@ docker-compose.yml
 Dockerfile
 application.properties
 nginx.conf
+
+# =====================================
+# Java / Maven / Gradle
+# =====================================
+*.class
+*.jar
+*.war
+*.ear
+target/
+build/
+.gradle/
+out/
+*.log
+
+# =====================================
+# IDE
+# =====================================
+.idea/
+*.iml
+.vscode/
+.project
+.classpath
+.settings/
+
+# =====================================
+# Environment variables and secrets
+# =====================================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+secrets/
+secret/
+credentials/
+
+# =====================================
+# Spring Boot local configuration
+# =====================================
+application-*.properties
+
+# =====================================
+# Security keys and certificates
+# =====================================
+jwt-private-key*
+jwt-secret*
+mfa-encryption-key*
+encryption-key*
+keystore/
+certificates/
+
+# =====================================
+# Database backups and dumps
+# =====================================
+*.sql
+*.sql.gz
+*.dump
+*.bak
+
+# =====================================
+# Uploaded documents and files
+# =====================================
+uploads/
+upload/
+documents/
+private-documents/
+storage/
+quarantine/
+
+# =====================================
+# Temporary files
+# =====================================
+tmp/
+temp/
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
+
+# =====================================
+# Test reports
+# =====================================
+test-output/
+surefire-reports/
+failsafe-reports/
+coverage/

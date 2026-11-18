@@ -13,8 +13,8 @@ import java.util.OptionalLong;
 @Service
 public class TotpServiceImpl implements TotpService {
 
-        private static final int PERIOD_SECONDS = 30;
-        private static final int CODE_LENGTH = 6;
+        // private static final int PERIOD_SECONDS = 30;
+        // private static final int CODE_LENGTH = 6;
 
         private final SecureRandom random = new SecureRandom();
 
@@ -35,7 +35,7 @@ public class TotpServiceImpl implements TotpService {
                 if (code == null || !code.matches("\\d{6}")) {
                         return OptionalLong.empty();
                 }
-                
+
                 long currentStep = Instant.now().getEpochSecond() / 30;
                 long lastUsed = lastUsedTimeStep == null ? -1 : lastUsedTimeStep;
                 System.out.println("lastUsed ::::: " + lastUsed + " currentStep :::::" + currentStep + "  code: : : "
@@ -89,7 +89,7 @@ public class TotpServiceImpl implements TotpService {
                         String username,
                         String secret) {
 
-                String issuer = "ReguShield";
+                String issuer = "Stranger";
 
                 return "otpauth://totp/"
                                 + java.net.URLEncoder.encode(

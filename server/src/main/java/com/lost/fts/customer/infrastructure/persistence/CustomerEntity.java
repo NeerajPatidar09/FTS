@@ -15,35 +15,35 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "customers",uniqueConstraints = {
-        @UniqueConstraint(
-            name = "ukcustomerscustomerref",
-            columnNames = "customerref"
-        )
-    })
+@Table(name = "customers", uniqueConstraints = {
+        @UniqueConstraint(name = "ukcustomerscustomerref", columnNames = "customerref")
+})
 public class CustomerEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "customerref",nullable = false, length = 64)
+    @Column(name = "customerref", nullable = false, length = 64)
     private String customerRef;
 
     @Column(name = "firstname", nullable = false, length = 20)
     private String firstName;
 
-    @Column(name = "lastname", nullable = false, length =20)
+    @Column(name = "lastname", nullable = false, length = 20)
     private String lastName;
 
     @Column(name = "fullname", nullable = false, length = 40)
     private String fullName;
 
-    @Column(name = "email",nullable = false,length = 250)
+    @Column(name = "email", nullable = false, length = 250)
     private String email;
 
+    @Column(name = "email_encrypted")
+    private String emailEncrypted;
+
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false,length=30)
+    @Column(nullable = false, length = 30)
     private CustomerStatus status = CustomerStatus.ACTIVE;
 
     @Column(name = "createdat", nullable = false, updatable = false)
@@ -128,4 +128,13 @@ public class CustomerEntity {
         return updatedAt;
     }
 
+    public String getEmailEncrypted() {
+        return emailEncrypted;
+    }
+
+    public void setEmailEncrypted(String emailEncrypted) {
+        this.emailEncrypted = emailEncrypted;
+    }
+
+    
 }

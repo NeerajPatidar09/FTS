@@ -16,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -39,29 +40,72 @@ public class SecurityConfig {
                 this.passwordEncoder = passwordEncoder;
         }
 
+        // @Bean
+        // public SecurityFilterChain securityFilterChain(HttpSecurity http) throws
+        // Exception {
+
+        // http.csrf(csrf -> csrf.disable()).cors(cors ->
+        // cors.configurationSource(corsConfigurationSource()))
+        // .sessionManagement(session -> session
+        // .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        // .authenticationProvider(authenticationProvider())
+        // .authorizeHttpRequests(auth -> auth
+        // .requestMatchers("/api/v1/auth/login", "/api/v1/auth/verify-mfa",
+        // "/api/v1/auth/verify-mfa-recovery",
+        // "/api/v1/auth/refresh", "/api/v1/auth/forgot-password",
+        // "/api/v1/auth/reset-password")
+        // .permitAll()
+        // .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+        // .requestMatchers("/api/v1/auth/mfa/**", "/api/v1/auth/change-password")
+        // .authenticated().anyRequest()
+        // .authenticated())
+        // .exceptionHandling(ex -> ex.authenticationEntryPoint((request, response,
+        // exception) -> {
+        // response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        // response.setContentType("application/json");
+        // response.getWriter().write("{\"message\":\"Authentication required\"}");
+        // }))
+
+        // .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        // return http.build();
+        // }
+
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-                http.csrf(csrf -> csrf.disable()).cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                                .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                                                .ignoringRequestMatchers(
+                                                                "/api/v1/auth/login",
+                                                                "/api/v1/auth/verify-mfa",
+                                                                "/api/v1/auth/verify-mfa-recovery",
+                                                                "/api/v1/auth/forgot-password",
+                                                                "/api/v1/auth/reset-password"))
                                 .sessionManagement(session -> session
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                                 .authenticationProvider(authenticationProvider())
-                                .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("/api/v1/auth/login", "/api/v1/auth/verify-mfa",
-                                                                "/api/v1/auth/verify-mfa-recovery",
-                                                                "/api/v1/auth/refresh")
-                                                .permitAll()
-                                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                                .requestMatchers("/api/v1/auth/mfa/**")
-                                                .authenticated().anyRequest()
-                                                .authenticated())
+                                .authorizeHttpRequests(auth -> auth.requestMatchers(
+                                                "/api/v1/auth/login",
+                                                "/api/v1/auth/verify-mfa",
+                                                "/api/v1/auth/verify-mfa-recovery",
+                                                "/api/v1/auth/refresh",
+                                                "/api/v1/auth/forgot-password",
+                                                "/api/v1/auth/reset-password").permitAll()
+                                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll().requestMatchers(
+                                                                "/api/v1/auth/mfa/**",
+                                                                "/api/v1/auth/change-password")
+                                                .authenticated().anyRequest().authenticated())
                                 .exceptionHandling(ex -> ex.authenticationEntryPoint((request, response, exception) -> {
                                         response.setStatus(HttpStatus.UNAUTHORIZED.value());
                                         response.setContentType("application/json");
-                                        response.getWriter().write("{\"message\":\"Authentication required\"}");
-                                }))
+                                        response.setCharacterEncoding("UTF-8");
 
-                                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                                        response.getWriter().write(
+                                                        "{\"message\":\"Authentication required\"}");
+                                })).addFilterBefore(
+                                                jwtFilter,
+                                                UsernamePasswordAuthenticationFilter.class);
+
                 return http.build();
         }
 
@@ -84,9 +128,10 @@ public class SecurityConfig {
                 configuration.setAllowedOrigins(List.of("http://localhost:5173"));
                 configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
                 configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-                configuration.setAllowCredentials(false);
+                configuration.setAllowCredentials(true);
+                configuration.setMaxAge(3600L);
                 UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-                source.registerCorsConfiguration("/**", configuration);
+                source.registerCorsConfiguration("/api/**", configuration);
                 return source;
         }
 }

@@ -33,16 +33,22 @@ public class CustomerController {
         CustomerResponse response = customerService.createCustomer(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-    
+
     @PreAuthorize("hasAuthority('CUSTOMER_VIEW')")
     @GetMapping("/{customerRef}")
     public ResponseEntity<CustomerResponse> getCustomerByRef(@PathVariable String customerRef) {
         return ResponseEntity.ok(customerService.getCustomerByRef(customerRef));
     }
-    
+
     @PreAuthorize("hasAuthority('CUSTOMER_VIEW')")
     @GetMapping
     public ResponseEntity<List<CustomerResponse>> getAllCustomers() {
         return ResponseEntity.ok(customerService.getAllCustomers());
     }
+
+    // @PreAuthorize("hasAuthority('CUSTOMER_SENSITIVE_VIEW')")
+    // @GetMapping("/{customerRef}/sensitive")
+    // public ResponseEntity<CustomerSensitiveResponse> getSensitiveData(@PathVariable String customerRef) {
+    //     return ResponseEntity.ok(customerService.getSensitiveCustomerData(customerRef));
+    // }
 }

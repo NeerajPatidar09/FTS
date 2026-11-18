@@ -12,15 +12,22 @@ import com.lost.fts.customer.api.request.CustomerCreateRequest;
 import com.lost.fts.customer.api.response.CustomerResponse;
 import com.lost.fts.customer.infrastructure.persistence.CustomerEntity;
 import com.lost.fts.customer.infrastructure.persistence.CustomerRepository;
+import com.lost.fts.security.encryption.DataMaskingService;
+import com.lost.fts.security.encryption.FieldEncryptionService;
 
 @Service
 @Transactional(readOnly = true)
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final DataMaskingService maskingService;
+    private final FieldEncryptionService encryptionService;
 
-    public CustomerServiceImpl(CustomerRepository customerRepository) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, DataMaskingService maskingService,
+            FieldEncryptionService encryptionService) {
         this.customerRepository = customerRepository;
+        this.maskingService = maskingService;
+        this.encryptionService = encryptionService;
     }
 
     @Override
@@ -87,7 +94,9 @@ public class CustomerServiceImpl implements CustomerService {
                 customer.getFirstName(),
                 customer.getLastName(),
                 customer.getFullName(),
-                customer.getEmail(),
+                // maskingService.maskPan(encryptionService.decrypt(customer.getPanEncrypted())),
+                // maskingService.maskPhone(encryptionService.decrypt(customer.getPhoneEncrypted())),
+                maskingService.maskEmail(encryptionService.decrypt(customer.getEmailEncrypted())),
                 customer.getStatus(),
                 customer.getCreatedAt(),
                 customer.getUpdatedAt());
