@@ -61,4 +61,4 @@ APP_FRONTEND_URL=http://localhost:5173
 
 ### Login Page
 
-![FTS Login Page](docs/screenshots/login-page.jpg)
+![FTS Login Page](docs/screenshots/login-page.png)
