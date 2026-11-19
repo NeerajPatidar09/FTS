@@ -1,5 +1,4 @@
 import type { Menu } from "../types/menu.types";
-import { Link } from "react-router-dom";
 // import CustomerStatusBadge from "./CustomerStatusBadge";
 
 interface MenuTableProps {
@@ -7,7 +6,7 @@ interface MenuTableProps {
 }
 
 export default function MenuTable({
-  menus,
+  // menus,
 }: MenuTableProps) {
 
   return (

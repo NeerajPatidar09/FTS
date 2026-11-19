@@ -1,14 +1,14 @@
 
-import type { LoginResponse } from "../features/auth/types/auth.types";
+import type { LoginSuccessResponse } from "../features/auth/types/auth.types";
 
 const AUTH_STORAGE_KEY = "Stranger_auth";
 
 interface StoredAuthSession {
-  data: LoginResponse;
+  data: LoginSuccessResponse;
   expiresAt: number;
 }
 
-export const saveAuthSession = (data: LoginResponse): void => {
+export const saveAuthSession = (data: LoginSuccessResponse): void => {
   const expiresAt = Date.now() + data.expiresIn;
 
   const session: StoredAuthSession = {
@@ -22,7 +22,7 @@ export const saveAuthSession = (data: LoginResponse): void => {
   );
 };
 
-export const getAuthSession = (): LoginResponse | null => {
+export const getAuthSession = (): LoginSuccessResponse | null => {
   const storedData = sessionStorage.getItem(AUTH_STORAGE_KEY);
 
   if (!storedData) {

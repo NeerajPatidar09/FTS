@@ -39,7 +39,8 @@ export default function Header({
     .replace(/-/g, " ")
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
 
-  const employeeName = auth?.user.employeeName || auth?.user.username || "User";
+  // const employeeName = auth?.user?.employeeName || auth?.user?.username || "User";
+  const employeeName = auth?.employeeName || auth?.username || "User";
 
   return (
     <header className="app-header">
@@ -97,7 +98,7 @@ export default function Header({
 
             <div className="profile-info">
               <strong>{employeeName}</strong>
-              <span>{auth?.user?.roles?.[0] ?? "User"}</span>
+              <span>{auth?.roles?.[0] ?? "User"}</span>
             </div>
 
             <ChevronDown size={16} />
@@ -109,7 +110,7 @@ export default function Header({
 
               <div className="profile-dropdown-info">
                 <UserCircle size={18} />
-                <span>{auth?.user.username}</span>
+                <span>{auth?.username}</span>
               </div>
 
               <button onClick={logout}>
