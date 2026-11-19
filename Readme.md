@@ -6,48 +6,6 @@ FTS is an enterprise-level financial monitoring and compliance management platfo
 The platform is intended for banks, financial institutions, compliance teams, risk management departments, fraud investigators, and financial administrators who need a secure, centralized solution for financial surveillance, operational control, and regulatory compliance.
 
 
-## Environment Variables
-
-To run this project locally, configure the following environment variables in your `.env` file or provide them through your deployment environment.
-
-### Backend Configuration
-
-| Variable | Description |
-|---|---|
-| `DB_URL` | MySQL database connection URL |
-| `DB_USERNAME` | MySQL database username |
-| `DB_PASSWORD` | MySQL database password |
-| `JWT_SECRET` | Secret key used for JWT signing |
-| `JWT_ACCESS_EXPIRATION` | Access token expiration time |
-| `JWT_REFRESH_EXPIRATION` | Refresh token expiration time |
-| `MFA_ENCRYPTION_KEY` | Base64-encoded AES-256 encryption key for MFA secrets |
-| `MAIL_HOST` | SMTP server hostname |
-| `MAIL_PORT` | SMTP server port |
-| `MAIL_USERNAME` | SMTP username |
-| `MAIL_PASSWORD` | SMTP password |
-| `APP_FRONTEND_URL` | Frontend application URL |
-
-### Example `.env` file
-
-```env
-DB_URL=jdbc:mysql://localhost:3306/fts_db
-DB_USERNAME=root
-DB_PASSWORD=your_database_password
-
-JWT_SECRET=your_secure_jwt_secret
-JWT_ACCESS_EXPIRATION=900000
-JWT_REFRESH_EXPIRATION=604800000
-
-MFA_ENCRYPTION_KEY=your_base64_encoded_32_byte_key
-
-MAIL_HOST=smtp.example.com
-MAIL_PORT=587
-MAIL_USERNAME=your_email@example.com
-MAIL_PASSWORD=your_email_password
-
-APP_FRONTEND_URL=http://localhost:5173
-```
-
 ## Tech Stack
 
 **Client:** React, TypeScript, Vite, React Router DOM,
@@ -62,7 +20,6 @@ APP_FRONTEND_URL=http://localhost:5173
 ### Login Page
 
 ![FTS Login Page](docs/screenshots/login-page.png)
-
 
 ## Installation
 
@@ -119,3 +76,114 @@ The frontend will run at the URL displayed in your terminal (typically `http://l
 - Confirm that the Spring Boot backend starts successfully.
 - Open the frontend development URL in your browser.
 - Sign in using your configured application credentials.
+## Environment Variables
+
+To run this project locally, configure the following environment variables in your `.env` file or provide them through your deployment environment.
+
+### Backend Configuration
+
+| Variable | Description |
+|---|---|
+| `DB_URL` | MySQL database connection URL |
+| `DB_USERNAME` | MySQL database username |
+| `DB_PASSWORD` | MySQL database password |
+| `JWT_SECRET` | Secret key used for JWT signing |
+| `JWT_ACCESS_EXPIRATION` | Access token expiration time |
+| `JWT_REFRESH_EXPIRATION` | Refresh token expiration time |
+| `MFA_ENCRYPTION_KEY` | Base64-encoded AES-256 encryption key for MFA secrets |
+| `MAIL_HOST` | SMTP server hostname |
+| `MAIL_PORT` | SMTP server port |
+| `MAIL_USERNAME` | SMTP username |
+| `MAIL_PASSWORD` | SMTP password |
+| `APP_FRONTEND_URL` | Frontend application URL |
+
+### Example `.env` file
+
+```env
+DB_URL=jdbc:mysql://localhost:3306/fts_db
+DB_USERNAME=root
+DB_PASSWORD=your_database_password
+
+JWT_SECRET=your_secure_jwt_secret
+JWT_ACCESS_EXPIRATION=900000
+JWT_REFRESH_EXPIRATION=604800000
+
+MFA_ENCRYPTION_KEY=your_base64_encoded_32_byte_key
+
+MAIL_HOST=smtp.example.com
+MAIL_PORT=587
+MAIL_USERNAME=your_email@example.com
+MAIL_PASSWORD=your_email_password
+
+APP_FRONTEND_URL=http://localhost:5173
+```
+
+## Run Locally
+
+Follow these steps to clone and run the FTS project on your local machine.
+
+### 1. Clone the Project
+
+```bash
+git clone https://github.com/NeerajPatidar09/FTS.git
+```
+
+### 2. Go to the Project Directory
+
+```bash
+cd FTS
+```
+
+### 3. Start the Backend (Spring Boot)
+
+Navigate to the backend directory:
+
+```bash
+cd server
+```
+
+Build and run the Spring Boot application:
+
+```bash
+mvn clean install
+mvn spring-boot:run
+```
+
+Backend URL:
+
+```text
+http://localhost:8080
+```
+
+### 4. Start the Frontend (React + Vite)
+
+Open a new terminal and navigate to the frontend directory:
+
+```bash
+cd FTS/client
+```
+
+Install the dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Frontend URL:
+
+```text
+http://localhost:5173
+```
+
+### 5. Database Configuration
+
+- Make sure MySQL is installed and running.
+- Create the required database.
+- Configure database credentials in the backend environment or application configuration.
+- Start the backend after configuring the database.
