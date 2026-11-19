@@ -69,7 +69,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 User user = userRepository.findByUsernameIgnoreCase(userDetails.getUsername()).orElseThrow();
                 UserDetails userDetails1 = customUserDetailsService.loadUserByUsername(user.getUsername());
                 String accessToken = jwtService.generateToken(userDetails1);
-                System.out.println("accessToken ::::::: " + accessToken);
+                // System.out.println("accessToken ::::::: " + accessToken);
                 UserMfa mfa = userMfaRepository.findByUserId(user.getId()).orElse(null);
                 if (mfa != null && mfa.isEnabled() && mfa.isVerified()) {
                         String challenge = mfaChallengeService.createChallenge(user.getId());

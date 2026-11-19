@@ -2,7 +2,6 @@ package com.lost.fts.security.mfa.application;
 
 import org.apache.commons.codec.binary.Base32;
 import org.springframework.stereotype.Service;
-
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.ByteBuffer;
@@ -38,15 +37,15 @@ public class TotpServiceImpl implements TotpService {
 
                 long currentStep = Instant.now().getEpochSecond() / 30;
                 long lastUsed = lastUsedTimeStep == null ? -1 : lastUsedTimeStep;
-                System.out.println("lastUsed ::::: " + lastUsed + " currentStep :::::" + currentStep + "  code: : : "
-                                + code + "  lastUsedTimeStep::: " + lastUsedTimeStep);
+                // System.out.println("lastUsed ::::: " + lastUsed + " currentStep :::::" + currentStep + "  code: : : "
+                                // + code + "  lastUsedTimeStep::: " + lastUsedTimeStep);
                 for (long step = currentStep - 1; step <= currentStep + 1; step++) {
 
                         if (step <= lastUsed) {
                                 continue;
                         }
                         String expected = generateCode(secret, step);
-                        System.out.println("expected ::::: " + expected);
+                        // System.out.println("expected ::::: " + expected);
                         if (java.security.MessageDigest.isEqual(
                                         expected.getBytes(java.nio.charset.StandardCharsets.US_ASCII),
                                         code.getBytes(java.nio.charset.StandardCharsets.US_ASCII))) {

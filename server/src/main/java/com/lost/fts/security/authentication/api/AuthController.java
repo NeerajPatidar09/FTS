@@ -97,9 +97,9 @@ public class AuthController {
         @PostMapping("/logout-all")
         @PreAuthorize("isAuthenticated()")
         public ResponseEntity<Void> logoutAll(Authentication authentication) {
-                System.out.println(authentication.getName());
+                // System.out.println(authentication.getName());
                 User user = userRepository.findByUsernameIgnoreCase(authentication.getName()).orElseThrow();
-                System.out.println("user id :::::::: " + user.getId());
+                // System.out.println("user id :::::::: " + user.getId());
                 refreshTokenService.revokeAllUserTokens(user.getId());
 
                 return ResponseEntity.noContent()

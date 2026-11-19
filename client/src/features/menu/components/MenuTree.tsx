@@ -14,7 +14,7 @@ import MenuIconPicker from "./MenuIconPicker";
 
 interface MenuTreeProps {
   menus: Menu[];
-  level?:number;
+  level?: number;
   onDeactivate: (menuId: number) => void;
   actionLoading?: boolean;
 }

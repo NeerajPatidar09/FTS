@@ -95,7 +95,7 @@ public class MfaController {
         public ResponseEntity<List<String>> enable(@Valid @RequestBody MfaVerifyRequest request,
                         Authentication authentication) {
                 List<String> recoveryCodes = mfaService.enable(authentication.getName(), request.code());
-                // System.out.println(generateChallengeToken());
+                // // System.out.println(generateChallengeToken());
                 return ResponseEntity.ok(recoveryCodes);
         }
 

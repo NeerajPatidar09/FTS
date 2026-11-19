@@ -1,4 +1,3 @@
-
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -9,18 +8,14 @@ import {
   RefreshCw,
   CheckCircle2,
   XCircle,
-  // Pencil,
 } from "lucide-react";
 
 import {
   getAllDepartments,
   deactivateDepartment,
 } from "../api/departmentApi";
-
 import type { Department } from "../types/department.types";
-
 import DepartmentTable from "../components/DepartmentTable";
-
 import "./DepartmentPage.css";
 
 interface LocationState {
@@ -37,33 +32,22 @@ export default function DepartmentListPage() {
   const [actionError, setActionError] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
-  const [deactivatingId, setDeactivatingId] = useState<number | null>(null);
-
+  // const [deactivatingId, setDeactivatingId] = useState<number | null>(null);
   const [successMessage, setSuccessMessage] = useState(
     (location.state as LocationState | null)?.successMessage ?? ""
   );
 
   const fetchDepartments = async () => {
-
     try {
-
       setLoading(true);
       setError("");
-
       const response = await getAllDepartments();
-
       setDepartments(response);
-
     } catch (error) {
-
       console.error("Failed to fetch departments:", error);
-
       setError("Unable to load departments. Please try again.");
-
     } finally {
-
       setLoading(false);
-
     }
   };
 
@@ -122,12 +106,10 @@ export default function DepartmentListPage() {
 
     try {
 
-      setDeactivatingId(department.id);
+      // setDeactivatingId(department.id);
       setActionError("");
       setSuccessMessage("");
-
       await deactivateDepartment(department.id);
-
       await fetchDepartments();
 
       setSuccessMessage(
@@ -135,45 +117,34 @@ export default function DepartmentListPage() {
       );
 
     } catch (error: any) {
-
       console.error("Failed to deactivate department:", error);
-
       setActionError(
         error.response?.data?.message ||
         "Unable to deactivate department."
       );
-
     } finally {
-
-      setDeactivatingId(null);
-
+      // setDeactivatingId(null);
     }
   };
 
   return (
 
     <div className="department-page">
-
       {/* Header */}
-
       <div className="department-page-header">
-
         <div>
           <h1>Department Management</h1>
           <p>Manage organizational departments.</p>
         </div>
-
         <div className="department-header-actions">
-
           <button
             className="department-refresh-btn"
             onClick={fetchDepartments}
-            disabled={deactivatingId !== null}
+            disabled={loading}
           >
             <RefreshCw size={16} />
             Refresh
           </button>
-
           <button
             className="department-create-btn"
             onClick={() => navigate("/departments/create")}
@@ -181,18 +152,13 @@ export default function DepartmentListPage() {
             <Plus size={17} />
             Create Department
           </button>
-
         </div>
-
       </div>
-
       {/* Success */}
-
       {successMessage && (
         <div className="department-success-message">
           <CheckCircle2 size={17} />
           {successMessage}
-
           <button
             type="button"
             onClick={() => setSuccessMessage("")}
@@ -218,7 +184,6 @@ export default function DepartmentListPage() {
       {/* Summary */}
 
       <div className="department-summary-grid">
-
         <div className="department-summary-card">
           <div className="department-summary-icon blue">
             <Building2 size={21} />

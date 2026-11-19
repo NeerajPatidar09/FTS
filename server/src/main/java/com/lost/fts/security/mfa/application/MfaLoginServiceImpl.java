@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.OptionalLong;
 import com.lost.fts.security.mfa.infrastructure.persistence.MfaRecoveryCodeRepository;
+
 @Service
 public class MfaLoginServiceImpl implements MfaLoginService {
 
@@ -38,36 +39,37 @@ public class MfaLoginServiceImpl implements MfaLoginService {
     @Override
     @Transactional
     public MfaVerificationResult verify(String rawChallenge, String code) {
-        System.out.println("line 43 -- rawChallenge ::::::" + rawChallenge + "  code :::::: " + code);
+        // System.out.println("line 43 -- rawChallenge ::::::" + rawChallenge + " code
+        // :::::: " + code);
         if (rawChallenge == null || rawChallenge.isBlank()) {
             return new MfaVerificationResult(false, null);
         }
 
         String hash = MfaChallengeServiceImpl.hash(rawChallenge);
-        System.out.println("line 49 -- hash ::::::" + hash);
+        // System.out.println("line 49 -- hash ::::::" + hash);
 
         LoginMfaChallenge challenge = challengeRepository.findByHashForUpdate(hash).orElse(null);
 
-        System.out.println("line 53 -- challenge ::::::" + challenge);
+        // System.out.println("line 53 -- challenge ::::::" + challenge);
         if (challenge == null || challenge.isExpired() || challenge.isConsumed()) {
-            System.out.println("line 55 ");
+            // System.out.println("line 55 ");
             return new MfaVerificationResult(false, null);
         }
 
-        System.out.println("line 53 -- challenge ::::::" + challenge.getUserId());
+        // System.out.println("line 53 -- challenge ::::::" + challenge.getUserId());
         User user = userRepository.findById(challenge.getUserId()).orElse(null);
 
         if (user == null || !user.isEnabled()) {
-            System.out.println("line 62 " + user.isEnabled());
+            // System.out.println("line 62 " + user.isEnabled());
             challenge.consume();
             return new MfaVerificationResult(false, null);
         }
 
-        System.out.println("line 69 " + user.getId());
+        // System.out.println("line 69 " + user.getId());
         UserMfa mfa = userMfaRepository.findByUserIdForUpdate(user.getId()).orElse(null);
 
         if (mfa == null || !mfa.isEnabled() || !mfa.isVerified()) {
-            System.out.println("line 70 ");
+            // System.out.println("line 70 ");
             challenge.consume();
             return new MfaVerificationResult(false, null);
         }

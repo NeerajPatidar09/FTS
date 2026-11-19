@@ -1,8 +1,6 @@
-
 import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { verifyMfaCode } from "../api/mfaApi";
-// import { useAuth } from "../../../context/AuthContext";
 import { useAuth } from "../hooks/useAuth";
 import "./MfaPage.css";
 
@@ -14,16 +12,14 @@ interface StoredChallenge {
 export default function VerifyMfaPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
-
   const [code, setCode] = useState("");
-  const [challenge, setChallenge] =
-    useState<StoredChallenge | null>(null);
+  const [challenge, setChallenge] = useState<StoredChallenge | null>(null);
   const [remainingSeconds, setRemainingSeconds] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const stored = sessionStorage.getItem("arcana_mfa_challenge");
+    const stored = sessionStorage.getItem("stranger_mfa_challenge");
 
     if (!stored) {
       navigate("/login", { replace: true });
@@ -38,7 +34,7 @@ export default function VerifyMfaPage() {
         !parsed.expiresAt ||
         parsed.expiresAt <= Date.now()
       ) {
-        sessionStorage.removeItem("arcana_mfa_challenge");
+        sessionStorage.removeItem("stranger_mfa_challenge");
         navigate("/login", { replace: true });
         return;
       }
@@ -48,7 +44,7 @@ export default function VerifyMfaPage() {
         Math.ceil((parsed.expiresAt - Date.now()) / 1000)
       );
     } catch {
-      sessionStorage.removeItem("arcana_mfa_challenge");
+      sessionStorage.removeItem("stranger_mfa_challenge");
       navigate("/login", { replace: true });
     }
   }, [navigate]);
@@ -65,7 +61,7 @@ export default function VerifyMfaPage() {
       setRemainingSeconds(remaining);
 
       if (remaining === 0) {
-        sessionStorage.removeItem("arcana_mfa_challenge");
+        sessionStorage.removeItem("stranger_mfa_challenge");
         setChallenge(null);
         setError("Your verification session expired. Please log in again.");
       }
@@ -95,10 +91,8 @@ export default function VerifyMfaPage() {
         challengeToken: challenge.challengeToken,
         code,
       });
-
       // Remove the temporary challenge after successful verification.
-      sessionStorage.removeItem("arcana_mfa_challenge");
-
+      sessionStorage.removeItem("stranger_mfa_challenge");
       // Save the final access token and user data in AuthContext.
       login(response);
 
@@ -113,7 +107,7 @@ export default function VerifyMfaPage() {
   };
 
   const handleBackToLogin = () => {
-    sessionStorage.removeItem("arcana_mfa_challenge");
+    sessionStorage.removeItem("stranger_mfa_challenge");
     navigate("/login", { replace: true });
   };
 

@@ -22,10 +22,10 @@ export default function DashboardPage() {
     return null;
   }
 
-  const employeeName = auth?.employeeName ?? auth?.username ?? "User";
+  const employeeName = auth.user.employeeName ?? auth.user.username ?? "User";
 
-  const permissions = auth?.permissions ?? [];
-  const roles = auth?.roles ?? [];
+  const permissions = auth.user.permissions ?? [];
+  const roles = auth.user.roles ?? [];
   const menus = auth.menus ?? [];
 
   const stats = [
@@ -184,12 +184,12 @@ export default function DashboardPage() {
 
             <div className="access-row">
               <span>Username</span>
-              <strong>{auth?.username}</strong>
+              <strong>{auth.user.username}</strong>
             </div>
 
             <div className="access-row">
               <span>Employee ID</span>
-              <strong>{auth?.employeeId}</strong>
+              <strong>{auth.user.employeeId}</strong>
             </div>
 
             <div className="access-row">

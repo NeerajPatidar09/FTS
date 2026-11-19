@@ -1,15 +1,17 @@
-import type { LoginSuccessResponse } from "../features/auth/types/auth.types";
+import type { LoginResponse } from "../features/auth/types/auth.types";
 
 export const hasAnyRole = (
-  auth: LoginSuccessResponse | null,
+  auth: LoginResponse | null,
   roles: string[]
 ): boolean => {
 
   if (!auth) {
     return false;
   }
-
+  if (!("user" in auth)) {
+    return false;
+  }
   return roles.some((role) =>
-    (auth.roles ?? []).includes(role)
+    (auth.user.roles ?? []).includes(role)
   );
 };

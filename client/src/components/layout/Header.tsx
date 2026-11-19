@@ -1,4 +1,3 @@
-
 import {
   Menu,
   PanelLeftClose,
@@ -11,7 +10,6 @@ import {
 
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
-
 import { useAuth } from "../../features/auth/hooks/useAuth";
 
 interface HeaderProps {
@@ -27,20 +25,14 @@ export default function Header({
 }: HeaderProps) {
 
   const { auth, logout } = useAuth();
-
   const location = useLocation();
-
   const [profileOpen, setProfileOpen] = useState(false);
-
-  const pageName =
-    location.pathname.split("/").filter(Boolean).pop() || "dashboard";
-
+  const pageName = location.pathname.split("/").filter(Boolean).pop() || "dashboard";
   const title = pageName
     .replace(/-/g, " ")
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
 
-  // const employeeName = auth?.user?.employeeName || auth?.user?.username || "User";
-  const employeeName = auth?.employeeName || auth?.username || "User";
+  const employeeName = auth?.user?.employeeName || auth?.user.username || "User";
 
   return (
     <header className="app-header">
@@ -98,7 +90,7 @@ export default function Header({
 
             <div className="profile-info">
               <strong>{employeeName}</strong>
-              <span>{auth?.roles?.[0] ?? "User"}</span>
+              <span>{auth?.user?.roles?.[0] ?? "User"}</span>
             </div>
 
             <ChevronDown size={16} />
@@ -110,7 +102,7 @@ export default function Header({
 
               <div className="profile-dropdown-info">
                 <UserCircle size={18} />
-                <span>{auth?.username}</span>
+                <span>{auth?.user.username}</span>
               </div>
 
               <button onClick={logout}>

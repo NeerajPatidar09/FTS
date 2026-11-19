@@ -1,5 +1,5 @@
 
-import type { LoginSuccessResponse } from "../features/auth/types/auth.types";
+import type { LoginSuccessResponse  } from "../features/auth/types/auth.types";
 
 const AUTH_STORAGE_KEY = "Stranger_auth";
 
@@ -22,7 +22,7 @@ export const saveAuthSession = (data: LoginSuccessResponse): void => {
   );
 };
 
-export const getAuthSession = (): LoginSuccessResponse | null => {
+export const getAuthSession = (): LoginSuccessResponse  | null => {
   const storedData = sessionStorage.getItem(AUTH_STORAGE_KEY);
 
   if (!storedData) {

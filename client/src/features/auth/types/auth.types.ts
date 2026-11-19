@@ -1,4 +1,3 @@
-
 export interface MenuResponse {
   id: number;
   menuCode: string;
@@ -32,7 +31,6 @@ export interface AuthUser {
 
 // new functionally 
 
-
 export interface LoginRequest {
   username: string;
   password: string;
@@ -49,22 +47,10 @@ export interface LoginSuccessResponse {
   accessToken: string;
   tokenType: string;
   expiresIn: number;
-  userId: number;
-  employeeId: number;
-  username: string;
-  email: string;
-  employeeName: string;
-  roles: string[];
-  permissions: string[];
+  user: AuthUser;
   menus: MenuResponse[];
 }
 
 export type LoginResponse =
   | LoginSuccessResponse
   | MfaRequiredResponse;
-
-export function isLoginSuccess(
-  response: LoginResponse
-  ): response is LoginSuccessResponse {
-  return "accessToken" in response;
-  }
