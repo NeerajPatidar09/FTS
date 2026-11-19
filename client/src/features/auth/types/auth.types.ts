@@ -62,3 +62,9 @@ export interface LoginSuccessResponse {
 export type LoginResponse =
   | LoginSuccessResponse
   | MfaRequiredResponse;
+
+export function isLoginSuccess(
+  response: LoginResponse
+  ): response is LoginSuccessResponse {
+  return "accessToken" in response;
+  }

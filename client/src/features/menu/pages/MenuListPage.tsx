@@ -1,19 +1,303 @@
 
+// import { useEffect, useMemo, useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import {
+//   countActiveMenus,
+//   countMenus,
+// } from "../utils/menuUtils";
+// import {
+//   deactivateMenu,
+//   getAllMenus,
+// } from "../api/menuApi";
+// import type { Menu } from "../types/menu.types";
+// import "./MenuPage.css";
+
+// const filterMenuTree = (menus: Menu[], search: string): Menu[] => {
+//   const keyword = search.trim().toLowerCase();
+
+//   if (!keyword) return menus;
+
+//   return menus.reduce<Menu[]>((result, menu) => {
+//     const matchingChildren = filterMenuTree(
+//       menu.children ?? [],
+//       keyword
+//     );
+
+//     const menuMatches =
+//       menu.menuName.toLowerCase().includes(keyword) ||
+//       menu.menuCode.toLowerCase().includes(keyword);
+
+//     if (menuMatches || matchingChildren.length > 0) {
+//       result.push({
+//         ...menu,
+//         children: menuMatches
+//           ? menu.children ?? []
+//           : matchingChildren,
+//       });
+//     }
+
+//     return result;
+//   }, []);
+// };
+
+// export default function MenuListPage() {
+//   const navigate = useNavigate();
+
+//   const [menus, setMenus] = useState<Menu[]>([]);
+//   const [search, setSearch] = useState("");
+//   const [statusFilter, setStatusFilter] = useState("ALL");
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState("");
+//   // const [actionLoading, setActionLoading] = useState(false);
+//   const [actionLoading, setActionLoading] = useState<number | null>(null);
+
+//   const loadMenus = async () => {
+//     try {
+//       setError("");
+//       setLoading(true);
+
+//       const response = await getAllMenus();
+//       setMenus(response);
+//     } catch (err) {
+//       console.error("Failed to load menus:", err);
+//       setError("Unable to load menus. Please try again.");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   useEffect(() => {
+//     void loadMenus();
+//   }, []);
+
+//   const filteredMenus = useMemo(() => {
+//     const searchedMenus = filterMenuTree(menus, search);
+
+//     if (statusFilter === "ALL") {
+//       return searchedMenus;
+//     }
+
+//     const activeValue = statusFilter === "ACTIVE";
+
+//     const filterByStatus = (items: Menu[]): Menu[] =>
+//       items.reduce<Menu[]>((result, menu) => {
+//         const children = filterByStatus(menu.children ?? []);
+
+//         if (menu.active === activeValue || children.length > 0) {
+//           result.push({
+//             ...menu,
+//             children,
+//           });
+//         }
+
+//         return result;
+//       }, []);
+
+//     return filterByStatus(searchedMenus);
+//   }, [menus, search, statusFilter]);
+
+//   const handleDeactivate = async (menuId: number) => {
+//     const confirmed = window.confirm(
+//       "Are you sure you want to deactivate this menu?"
+//     );
+
+//     if (!confirmed) return;
+
+//     try {
+//       setActionLoading(true);
+//       await deactivateMenu(menuId);
+//       await loadMenus();
+//     } catch (err) {
+//       console.error("Failed to deactivate menu:", err);
+//       setError("Unable to deactivate this menu.");
+//     } finally {
+//       setActionLoading(false);
+//     }
+//   };
+
+//   const totalMenus = countMenus(menus);
+//   const activeMenus = countActiveMenus(menus);
+//   const inactiveMenus = totalMenus - activeMenus;
+
+//   return (
+//     <div className="menu-page">
+//       <div className="menu-page-header">
+//         <div>
+//           <h1>Menu Management</h1>
+//           <p>
+//             Manage application navigation menus and their hierarchy.
+//           </p>
+//         </div>
+//         <div className="btn-header">
+//           <button
+//             className="menu-btn menu-create-btn"
+//             onClick={() => navigate("/menus/create")}
+//           >
+//             + Create Menu
+//           </button>
+//           <button
+//             className="menu-btn menu-assign-btn"
+//             onClick={() => navigate("/menus/roles/assign")}
+//           >
+//             Assign Menus to Roles
+//           </button></div>
+//       </div>
+
+//       <div className="menu-summary-grid">
+
+//         <div className="menu-summary">
+//           <div>
+//             <span>Total Menus</span>
+//             <h2>{totalMenus}</h2>
+//           </div>
+//         </div>
+//         <div className="menu-summary">
+//           <div>
+//             <span>Active Menus</span>
+//             <h2>{activeMenus}</h2>
+//           </div>
+//         </div>
+//         <div className="menu-summary">
+//           <div>
+//             <span>Inactive Menus</span>
+//             <h2>{inactiveMenus}</h2>
+//           </div>
+//         </div>
+//       </div>
+
+//       <section className="menu-list-card">
+//         <div className="menu-list-header">
+//           <div>
+//             <h2>Menu List</h2>
+//             <p>
+//               View and search registered menu.
+//             </p>
+//           </div>
+//         </div>
+//         {/* Loading */}
+
+//         <div className="menu-table-wrapper">
+//           <table className="menu-table">
+//             <thead>
+//               <tr>
+//                 <th>#</th>
+//                 <th>Menu Name</th>
+//                 <th>Icon</th>
+//                 <th>Parent Menu</th>
+//                 <th>Path (URL)</th>
+//                 <th>Order</th>
+//                 <th>Status</th>
+//                 <th>Actions</th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {filteredMenus.length === 0 ? (
+//                 <tr>
+//                   <td colSpan={8} className="menu-table-empty">
+//                     No menus found.
+//                   </td>
+//                 </tr>
+//               ) : (
+//                 filteredMenus.map((menu, index) => (
+//                   <tr key={menu.id}>
+//                     <td>{index + 1}</td>
+
+//                     <td>
+//                       <div className="menu-name-cell">
+//                         {menu.parentId !== null && (
+//                           <span className="menu-child-indicator">↳</span>
+//                         )}
+//                         <span>{menu.menuName}</span>
+//                       </div>
+//                       <small className="menu-code">
+//                         {menu.menuCode}
+//                       </small>
+//                     </td>
+
+//                     <td>
+//                       <span className="menu-icon-cell">
+//                         {menu.menuIcon || "—"}
+//                       </span>
+//                     </td>
+
+//                     <td>
+//                       {menu.parentId !== null ? parentNameById.get(menu.id) ?? "—"
+//                         : "—"}
+//                     </td>
+
+//                     <td>
+//                       <span className="menu-path">
+//                         {menu.menuPath || "—"}
+//                       </span>
+//                     </td>
+
+//                     <td>{menu.displayOrder}</td>
+
+//                     <td>
+//                       <span
+//                         className={`menu-status ${menu.active ? "active" : "inactive"
+//                           }`}
+//                       >
+//                         {menu.active ? "Active" : "Inactive"}
+//                       </span>
+//                     </td>
+
+//                     <td>
+//                       <div className="menu-row-actions">
+//                         <button
+//                           type="button"
+//                           className="menu-action-button deactivate"
+//                           title={
+//                             menu.active
+//                               ? "Deactivate menu"
+//                               : "Already inactive"
+//                           }
+//                           disabled={
+//                             !menu.active ||
+//                             actionLoading === menu.id
+//                           }
+//                           onClick={() => void handleDeactivate(menu.id)}
+//                         >
+//                           {actionLoading === menu.id ? "..." : "Deactivate"}
+//                         </button>
+//                       </div>
+//                     </td>
+//                   </tr>
+//                 ))
+//               )}
+//             </tbody>
+//           </table>
+//         </div>
+
+
+//       </section>
+//     </div>
+//   );
+// }
+
+
+
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import {
   countActiveMenus,
   countMenus,
 } from "../utils/menuUtils";
+
 import {
   deactivateMenu,
   getAllMenus,
 } from "../api/menuApi";
+
 import type { Menu } from "../types/menu.types";
-import MenuTree from "../components/MenuTree";
+
 import "./MenuPage.css";
 
-const filterMenuTree = (menus: Menu[], search: string): Menu[] => {
+const filterMenuTree = (
+  menus: Menu[],
+  search: string
+): Menu[] => {
   const keyword = search.trim().toLowerCase();
 
   if (!keyword) return menus;
@@ -49,7 +333,11 @@ export default function MenuListPage() {
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [actionLoading, setActionLoading] = useState(false);
+
+  // Stores the ID of the menu currently being deactivated.
+  const [actionLoading, setActionLoading] = useState<number | null>(
+    null
+  );
 
   const loadMenus = async () => {
     try {
@@ -70,6 +358,26 @@ export default function MenuListPage() {
     void loadMenus();
   }, []);
 
+  // Create a lookup map for parent menu names.
+  const parentNameById = useMemo(() => {
+    const map = new Map<number, string>();
+
+    const collectMenus = (items: Menu[]) => {
+      items.forEach((menu) => {
+        map.set(menu.id, menu.menuName);
+
+        if (menu.children?.length) {
+          collectMenus(menu.children);
+        }
+      });
+    };
+
+    collectMenus(menus);
+
+    return map;
+  }, [menus]);
+
+  // Search and status filtering.
   const filteredMenus = useMemo(() => {
     const searchedMenus = filterMenuTree(menus, search);
 
@@ -81,7 +389,9 @@ export default function MenuListPage() {
 
     const filterByStatus = (items: Menu[]): Menu[] =>
       items.reduce<Menu[]>((result, menu) => {
-        const children = filterByStatus(menu.children ?? []);
+        const children = filterByStatus(
+          menu.children ?? []
+        );
 
         if (menu.active === activeValue || children.length > 0) {
           result.push({
@@ -96,6 +406,7 @@ export default function MenuListPage() {
     return filterByStatus(searchedMenus);
   }, [menus, search, statusFilter]);
 
+  // Deactivate menu.
   const handleDeactivate = async (menuId: number) => {
     const confirmed = window.confirm(
       "Are you sure you want to deactivate this menu?"
@@ -104,14 +415,16 @@ export default function MenuListPage() {
     if (!confirmed) return;
 
     try {
-      setActionLoading(true);
+      setActionLoading(menuId);
+      setError("");
+
       await deactivateMenu(menuId);
       await loadMenus();
     } catch (err) {
       console.error("Failed to deactivate menu:", err);
       setError("Unable to deactivate this menu.");
     } finally {
-      setActionLoading(false);
+      setActionLoading(null);
     }
   };
 
@@ -121,6 +434,8 @@ export default function MenuListPage() {
 
   return (
     <div className="menu-page">
+
+      {/* Page Header */}
       <div className="menu-page-header">
         <div>
           <h1>Menu Management</h1>
@@ -128,56 +443,100 @@ export default function MenuListPage() {
             Manage application navigation menus and their hierarchy.
           </p>
         </div>
+
         <div className="btn-header">
-        <button
-          className="menu-btn menu-create-btn"
-          onClick={() => navigate("/menus/create")}
-        >
-          + Create Menu
-        </button>
-        <button
-          className="menu-btn menu-assign-btn"
-          onClick={() => navigate("/menus/roles/assign")}
-        >
-          Assign Menus to Roles
-        </button></div>
+          <button
+            className="menu-btn menu-create-btn"
+            onClick={() => navigate("/menus/create")}
+          >
+            + Create Menu
+          </button>
+
+          <button
+            className="menu-btn menu-assign-btn"
+            onClick={() => navigate("/menus/roles/assign")}
+          >
+            Assign Menus to Roles
+          </button>
+        </div>
       </div>
 
+      {/* Summary Cards */}
       <div className="menu-summary-grid">
-        
+
         <div className="menu-summary">
           <div>
             <span>Total Menus</span>
             <h2>{totalMenus}</h2>
           </div>
         </div>
+
         <div className="menu-summary">
           <div>
             <span>Active Menus</span>
             <h2>{activeMenus}</h2>
           </div>
         </div>
+
         <div className="menu-summary">
           <div>
             <span>Inactive Menus</span>
             <h2>{inactiveMenus}</h2>
           </div>
         </div>
+
       </div>
 
-     <section className="menu-list-card">
+      {/* Menu List */}
+      <section className="menu-list-card">
+
         <div className="menu-list-header">
           <div>
             <h2>Menu List</h2>
             <p>
-              View and search registered menu.
+              View and search registered menus.
             </p>
           </div>
         </div>
-        {/* Loading */}
 
-       <div className="menu-table-wrapper">
+        {/* Error Message */}
+        {error && (
+          <div className="menu-error">
+            {error}
+          </div>
+        )}
+
+        {/* Search and Status Filter */}
+        <div className="menu-filters">
+
+          <input
+            type="text"
+            placeholder="Search menu name or code..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="ALL">All Status</option>
+            <option value="ACTIVE">Active</option>
+            <option value="INACTIVE">Inactive</option>
+          </select>
+
+        </div>
+
+        {/* Loading */}
+        {loading ? (
+          <div className="menu-loading">
+            Loading menus...
+          </div>
+        ) : (
+          <div className="menu-table-wrapper">
+
             <table className="menu-table">
+
               <thead>
                 <tr>
                   <th>#</th>
@@ -190,7 +549,9 @@ export default function MenuListPage() {
                   <th>Actions</th>
                 </tr>
               </thead>
+
               <tbody>
+
                 {filteredMenus.length === 0 ? (
                   <tr>
                     <td colSpan={8} className="menu-table-empty">
@@ -200,15 +561,20 @@ export default function MenuListPage() {
                 ) : (
                   filteredMenus.map((menu, index) => (
                     <tr key={menu.id}>
+
                       <td>{index + 1}</td>
 
                       <td>
                         <div className="menu-name-cell">
                           {menu.parentId !== null && (
-                            <span className="menu-child-indicator">↳</span>
+                            <span className="menu-child-indicator">
+                              ↳
+                            </span>
                           )}
+
                           <span>{menu.menuName}</span>
                         </div>
+
                         <small className="menu-code">
                           {menu.menuCode}
                         </small>
@@ -222,7 +588,7 @@ export default function MenuListPage() {
 
                       <td>
                         {menu.parentId !== null
-                          ? parentNameById.get(menu.id) ?? "—"
+                          ? parentNameById.get(menu.parentId) ?? "—"
                           : "—"}
                       </td>
 
@@ -246,6 +612,7 @@ export default function MenuListPage() {
 
                       <td>
                         <div className="menu-row-actions">
+
                           <button
                             type="button"
                             className="menu-action-button deactivate"
@@ -258,21 +625,31 @@ export default function MenuListPage() {
                               !menu.active ||
                               actionLoading === menu.id
                             }
-                            onClick={() => void handleDeactivate(menu)}
+                            onClick={() =>
+                              void handleDeactivate(menu.id)
+                            }
                           >
-                            {actionLoading === menu.id ? "..." : "Deactivate"}
+                            {actionLoading === menu.id
+                              ? "Deactivating..."
+                              : "Deactivate"}
                           </button>
+
                         </div>
                       </td>
+
                     </tr>
                   ))
                 )}
-              </tbody>
-            </table>
-          </div>
 
-        
+              </tbody>
+
+            </table>
+
+          </div>
+        )}
+
       </section>
+
     </div>
   );
 }

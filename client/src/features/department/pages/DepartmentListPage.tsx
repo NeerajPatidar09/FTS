@@ -9,7 +9,7 @@ import {
   RefreshCw,
   CheckCircle2,
   XCircle,
-  Pencil,
+  // Pencil,
 } from "lucide-react";
 
 import {
@@ -31,19 +31,12 @@ export default function DepartmentListPage() {
 
   const navigate = useNavigate();
   const location = useLocation();
-
   const [departments, setDepartments] = useState<Department[]>([]);
-
   const [loading, setLoading] = useState(true);
-
   const [error, setError] = useState("");
-
   const [actionError, setActionError] = useState("");
-
   const [search, setSearch] = useState("");
-
   const [statusFilter, setStatusFilter] = useState("ALL");
-
   const [deactivatingId, setDeactivatingId] = useState<number | null>(null);
 
   const [successMessage, setSuccessMessage] = useState(
@@ -175,7 +168,7 @@ export default function DepartmentListPage() {
           <button
             className="department-refresh-btn"
             onClick={fetchDepartments}
-            disabled={loading}
+            disabled={deactivatingId !== null}
           >
             <RefreshCw size={16} />
             Refresh

@@ -1,7 +1,7 @@
-import type { LoginResponse } from "../features/auth/types/auth.user.types";
+import type { LoginSuccessResponse } from "../features/auth/types/auth.types";
 
 export const hasAnyRole = (
-  auth: LoginResponse | null,
+  auth: LoginSuccessResponse | null,
   roles: string[]
 ): boolean => {
 
@@ -10,6 +10,6 @@ export const hasAnyRole = (
   }
 
   return roles.some((role) =>
-    (auth.user.roles ?? []).includes(role)
+    (auth.roles ?? []).includes(role)
   );
 };

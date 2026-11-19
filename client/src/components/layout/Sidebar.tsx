@@ -32,15 +32,15 @@ export default function Sidebar({
     useState<Record<number, boolean>>({});
 
   const employeeName =
-    auth?.user?.employeeName ||
-    auth?.user?.username ||
+    auth?.employeeName ||
+    auth?.username ||
     "User";
 
   // Filter menus using backend permissions
   const visibleMenus = filterMenusByPermission(
     auth?.menus ?? [],
     {
-      permissions: auth?.user.permissions ?? [],
+      permissions: auth?.permissions ?? [],
     }
   );
 
@@ -201,7 +201,7 @@ export default function Sidebar({
             <div className="sidebar-user-info">
               <strong>{employeeName}</strong>
               <span>
-                {auth?.user?.roles?.[0] ?? "User"}
+                {auth?.roles?.[0] ?? "User"}
               </span>
             </div>
           )}

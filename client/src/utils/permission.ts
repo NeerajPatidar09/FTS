@@ -1,8 +1,8 @@
-import type { LoginResponse } from "../features/auth/types/auth.user.types";
+import type { LoginSuccessResponse } from "../features/auth/types/auth.types";
 
 // Check whether the user has a particular permission
 export const hasPermission = (
-  auth: LoginResponse | null,
+  auth: LoginSuccessResponse | null,
   permission: string
 ): boolean => {
 
@@ -10,12 +10,12 @@ export const hasPermission = (
     return false;
   }
 
-  return (auth.user.permissions ?? []).includes(permission);
+  return (auth?.permissions ?? []).includes(permission);
 };
 
 // Check whether the user has at least one permission
 export const hasAnyPermission = (
-  auth: LoginResponse | null,
+  auth: LoginSuccessResponse | null,
   permissions: string[]
 ): boolean => {
 
@@ -24,13 +24,13 @@ export const hasAnyPermission = (
   }
 
   return permissions.some((permission) =>
-    (auth.user.permissions ?? []).includes(permission)
+    (auth?.permissions ?? []).includes(permission)
   );
 };
 
 // Check whether the user has all required permissions
 export const hasAllPermissions = (
-  auth: LoginResponse | null,
+  auth: LoginSuccessResponse | null,
   permissions: string[]
 ): boolean => {
 
@@ -39,13 +39,13 @@ export const hasAllPermissions = (
   }
 
   return permissions.every((permission) =>
-    (auth.user.permissions ?? []).includes(permission)
+    (auth?.permissions ?? []).includes(permission)
   );
 };
 
 // Check user role
 export const hasRole = (
-  auth: LoginResponse | null,
+  auth: LoginSuccessResponse | null,
   role: string
 ): boolean => {
 
@@ -53,5 +53,5 @@ export const hasRole = (
     return false;
   }
 
-  return (auth.user.roles ?? []).includes(role);
+  return (auth?.roles ?? []).includes(role);
 };

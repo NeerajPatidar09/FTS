@@ -14,6 +14,7 @@ import MenuIconPicker from "./MenuIconPicker";
 
 interface MenuTreeProps {
   menus: Menu[];
+  level?:number;
   onDeactivate: (menuId: number) => void;
   actionLoading?: boolean;
 }
@@ -93,7 +94,7 @@ export default function MenuTree({
                 <button
                   type="button"
                   className="menu-deactivate-btn"
-                  onClick={() => onDeactivate(menu)}
+                  onClick={() => onDeactivate(menu.id)}
                 >
                   Deactivate
                 </button>

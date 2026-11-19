@@ -1,4 +1,3 @@
-
 export interface Permission {
   id: number;
   permissionCode: string;
@@ -15,4 +14,4 @@ export interface CreatePermissionRequest {
 
 export type PermissionFormValues = CreatePermissionRequest;
 
-// export type PermissionListResponse = Permission[];
+export type PermissionListResponse = Permission[];

@@ -207,12 +207,11 @@ export default function LoginPage() {
       }
 
       // Normal login: validate the final access token.
-      if (!response.accessToken) {
+      if ("accessToken" in response) {
+        login(response);
+      }else{
         throw new Error("Authentication token was not received.");
       }
-
-      // Update global authentication state.
-      login(response);
 
       // Navigate to dashboard.
       navigate("/dashboard", { replace: true });
