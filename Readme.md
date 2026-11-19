@@ -62,3 +62,60 @@ APP_FRONTEND_URL=http://localhost:5173
 ### Login Page
 
 ![FTS Login Page](docs/screenshots/login-page.png)
+
+
+## Installation
+
+Follow these steps to set up the FTS project locally.
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/NeerajPatidar09/FTS.git
+cd FTS
+```
+
+### 2. Backend Setup (Spring Boot)
+
+Make sure Java 17 and Maven are installed.
+
+```bash
+cd server
+```
+
+Configure your database and environment variables, then run:
+
+```bash
+mvn clean install
+mvn spring-boot:run
+```
+
+The backend will run at:
+
+```text
+http://localhost:8080
+```
+
+### 3. Frontend Setup (React + TypeScript)
+
+Make sure Node.js and npm are installed.
+
+```bash
+cd client
+npm install
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The frontend will run at the URL displayed in your terminal (typically `http://localhost:5173`).
+
+### 4. Verify Installation
+
+- Confirm that the MySQL database is running.
+- Confirm that the Spring Boot backend starts successfully.
+- Open the frontend development URL in your browser.
+- Sign in using your configured application credentials.
