@@ -6,6 +6,76 @@ FTS is an enterprise-level financial monitoring and compliance management platfo
 The platform is intended for banks, financial institutions, compliance teams, risk management departments, fraud investigators, and financial administrators who need a secure, centralized solution for financial surveillance, operational control, and regulatory compliance.
 
 
+## Tech Stack
+
+**Client:** React, TypeScript, Vite, React Router DOM,
+
+**Server:** Java 17, Spring Boot, Maven
+
+**Database:** MySQL
+
+
+## Screenshots
+
+### Login Page
+
+![FTS Login Page](docs/screenshots/login-page.png)
+
+## Installation
+
+Follow these steps to set up the FTS project locally.
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/NeerajPatidar09/FTS.git
+cd FTS
+```
+
+### 2. Backend Setup (Spring Boot)
+
+Make sure Java 17 and Maven are installed.
+
+```bash
+cd server
+```
+
+Configure your database and environment variables, then run:
+
+```bash
+mvn clean install
+mvn spring-boot:run
+```
+
+The backend will run at:
+
+```text
+http://localhost:8080
+```
+
+### 3. Frontend Setup (React + TypeScript)
+
+Make sure Node.js and npm are installed.
+
+```bash
+cd client
+npm install
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The frontend will run at the URL displayed in your terminal (typically `http://localhost:5173`).
+
+### 4. Verify Installation
+
+- Confirm that the MySQL database is running.
+- Confirm that the Spring Boot backend starts successfully.
+- Open the frontend development URL in your browser.
+- Sign in using your configured application credentials.
 ## Environment Variables
 
 To run this project locally, configure the following environment variables in your `.env` file or provide them through your deployment environment.
@@ -48,17 +118,72 @@ MAIL_PASSWORD=your_email_password
 APP_FRONTEND_URL=http://localhost:5173
 ```
 
-## Tech Stack
+## Run Locally
 
-**Client:** React, TypeScript, Vite, React Router DOM,
+Follow these steps to clone and run the FTS project on your local machine.
 
-**Server:** Java 17, Spring Boot, Maven
+### 1. Clone the Project
 
-**Database:** MySQL
+```bash
+git clone https://github.com/NeerajPatidar09/FTS.git
+```
 
+### 2. Go to the Project Directory
 
-## Screenshots
+```bash
+cd FTS
+```
 
-### Login Page
+### 3. Start the Backend (Spring Boot)
 
-![FTS Login Page](docs/screenshots/login-page.jpg)
+Navigate to the backend directory:
+
+```bash
+cd server
+```
+
+Build and run the Spring Boot application:
+
+```bash
+mvn clean install
+mvn spring-boot:run
+```
+
+Backend URL:
+
+```text
+http://localhost:8080
+```
+
+### 4. Start the Frontend (React + Vite)
+
+Open a new terminal and navigate to the frontend directory:
+
+```bash
+cd FTS/client
+```
+
+Install the dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Frontend URL:
+
+```text
+http://localhost:5173
+```
+
+### 5. Database Configuration
+
+- Make sure MySQL is installed and running.
+- Create the required database.
+- Configure database credentials in the backend environment or application configuration.
+- Start the backend after configuring the database.
