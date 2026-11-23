@@ -2,6 +2,8 @@ package com.lost.fts.security.config;
 
 import com.lost.fts.security.jwt.JwtAuthenticationFilter;
 import com.lost.fts.security.userdetails.CustomUserDetailsService;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -32,6 +34,9 @@ public class SecurityConfig {
         private final CustomUserDetailsService userDetailsService;
         private final PasswordEncoder passwordEncoder;
 
+        @Value("${app.cors.allowed-origins}")
+        private String allowedOrigins;
+
         public SecurityConfig(JwtAuthenticationFilter jwtFilter, CustomUserDetailsService userDetailsService,
                         PasswordEncoder passwordEncoder) {
 
@@ -40,40 +45,10 @@ public class SecurityConfig {
                 this.passwordEncoder = passwordEncoder;
         }
 
-        // @Bean
-        // public SecurityFilterChain securityFilterChain(HttpSecurity http) throws
-        // Exception {
-
-        // http.csrf(csrf -> csrf.disable()).cors(cors ->
-        // cors.configurationSource(corsConfigurationSource()))
-        // .sessionManagement(session -> session
-        // .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        // .authenticationProvider(authenticationProvider())
-        // .authorizeHttpRequests(auth -> auth
-        // .requestMatchers("/api/v1/auth/login", "/api/v1/auth/verify-mfa",
-        // "/api/v1/auth/verify-mfa-recovery",
-        // "/api/v1/auth/refresh", "/api/v1/auth/forgot-password",
-        // "/api/v1/auth/reset-password")
-        // .permitAll()
-        // .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-        // .requestMatchers("/api/v1/auth/mfa/**", "/api/v1/auth/change-password")
-        // .authenticated().anyRequest()
-        // .authenticated())
-        // .exceptionHandling(ex -> ex.authenticationEntryPoint((request, response,
-        // exception) -> {
-        // response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        // response.setContentType("application/json");
-        // response.getWriter().write("{\"message\":\"Authentication required\"}");
-        // }))
-
-        // .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-        // return http.build();
-        // }
-
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-                http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                http.cors(cors -> cors.configurationSource(corsConfigurationSource(allowedOrigins)))
                                 .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                                                 .ignoringRequestMatchers(
                                                                 "/api/v1/auth/login",
@@ -122,11 +97,11 @@ public class SecurityConfig {
         }
 
         @Bean
-        public CorsConfigurationSource corsConfigurationSource() {
+        public CorsConfigurationSource corsConfigurationSource(
+                        @Value("${app.security.allowed-origins}") String corskey) {
 
                 CorsConfiguration configuration = new CorsConfiguration();
-                configuration.setAllowedOrigins(List.of("http://localhost:5173"));
-                // configuration.setAllowedOrigins(List.of("https://fts-nine-rose.vercel.app"));
+                configuration.setAllowedOrigins(List.of(corskey));
                 configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
                 configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
                 configuration.setAllowCredentials(true);

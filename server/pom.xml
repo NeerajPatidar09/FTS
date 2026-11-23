@@ -13,7 +13,7 @@
 	<groupId>com.lost</groupId>
 	<artifactId>fts</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name />
 	<description />
 	<url />
@@ -138,6 +138,7 @@
 
 	</dependencies>
 	<build>
+		<finalName>fts</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

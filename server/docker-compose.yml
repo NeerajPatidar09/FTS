@@ -1,0 +1,57 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: fts-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD is missing}
+      MYSQL_DATABASE: ${MYSQLDATABASE:?MYSQLDATABASE is missing}
+      MYSQL_USER: ${MYSQLUSER:?MYSQLUSER is missing}
+      MYSQL_PASSWORD: ${MYSQLPASSWORD:?MYSQLPASSWORD is missing}
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - fts-network
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fts-backend
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    environment:
+      PORT: 9090
+      MYSQLHOST: mysql
+      MYSQLPORT: 3306
+      MYSQLDATABASE: ${MYSQLDATABASE}
+      MYSQLUSER: ${MYSQLUSER}
+      MYSQLPASSWORD: ${MYSQLPASSWORD}
+      SPRING_DATASOURCE_USERNAME: ${MYSQLUSER}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQLPASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      REFRESH_COOKIE_SECURE: ${REFRESH_COOKIE_SECURE}
+      REFRESH_COOKIE_SAME_SITE: ${REFRESH_COOKIE_SAME_SITE}
+      APP_ALLOWED_ORIGINS: ${APP_ALLOWED_ORIGINS}
+      MFA_ENCRYPTION_KEY: ${MFA_ENCRYPTION_KEY}
+      ENCRYPTION_KEY_PROVIDER: ${ENCRYPTION_KEY_PROVIDER}
+      EMAIL_USERNAME: ${EMAIL_USERNAME}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - fts-network
+volumes:
+  mysql_data:
+networks:
+  fts-network:
+    driver: bridge
