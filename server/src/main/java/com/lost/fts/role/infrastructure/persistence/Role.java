@@ -20,18 +20,18 @@ public class Role {
     @Column(name = "role_code", nullable = false, unique = true)
     private String roleCode;
 
-    @Column(name = "role_name", nullable = false)
-
+    
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "role_permissions", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"), uniqueConstraints = @UniqueConstraint(columnNames = {
-            "role_id", "permission_id" }))
-    private Set<Permission> permissions = new HashSet<>();
-
+        "role_id", "permission_id" }))
+        private Set<Permission> permissions = new HashSet<>();
+        
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "role_menus", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "menu_id"), uniqueConstraints = @UniqueConstraint(columnNames = {
             "role_id", "menu_id" }))
-    private Set<Menu> menus = new HashSet<>();
-
+            private Set<Menu> menus = new HashSet<>();
+            
+    @Column(name = "role_name", nullable = false)
     private String roleName;
 
     private String description;

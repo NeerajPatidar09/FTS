@@ -10,6 +10,7 @@
    gap: 16px;
    margin-bottom: 24px;
  }
+
  .btn-header {
    display: flex;
    align-items: center;
@@ -31,7 +32,7 @@
    font-size: 14px;
  }
 
-  .menu-summary-grid {
+ .menu-summary-grid {
    display: grid;
    grid-template-columns: repeat(3, minmax(0, 1fr));
    gap: 16px;
@@ -213,8 +214,8 @@
      flex-direction: column;
    }
 
-   .btn-header{
-    align-items: flex-start;
+   .btn-header {
+     align-items: flex-start;
      flex-direction: column;
    }
 
@@ -267,10 +268,13 @@
    border: 1px solid #e5eaf1;
    border-radius: 8px;
    overflow: hidden;
+   
+   /* padding: 10px 12px; */
  }
 
  .assignment-menu-node+.assignment-menu-node {
    border-top: 1px solid #edf0f5;
+   margin-left: 12px;
  }
 
  .assignment-menu-label {
@@ -549,29 +553,29 @@
    gap: 8px;
  }
 
- .menu-btn{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 11px 18px;
-  border-radius: 9px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s;
+ .menu-btn {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 8px;
+   padding: 11px 18px;
+   border-radius: 9px;
+   font-size: 13px;
+   font-weight: 600;
+   cursor: pointer;
+   transition: 0.2s;
  }
 
  .menu-create-btn {
-  background: #17191f;
-  color: #fff;
-  border: 1px solid #17191f;
+   background: #17191f;
+   color: #fff;
+   border: 1px solid #17191f;
  }
 
  .menu-assign-btn {
-  background: #7897f5;
-  color: #17191f;
-  border: 1px solid #7897f5;
+   background: #7897f5;
+   color: #17191f;
+   border: 1px solid #7897f5;
  }
 
  .menu-action-button {
@@ -633,6 +637,7 @@
      align-items: flex-start;
      flex-direction: column;
    }
+
    .btn-header {
      align-items: flex-start;
      flex-direction: column;

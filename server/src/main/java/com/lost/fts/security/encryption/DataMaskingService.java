@@ -12,8 +12,8 @@ public class DataMaskingService {
         }
 
         return "XXXXX"
-            + pan.substring(5, pan.length() - 1)
-            + "X";
+                + pan.substring(5, pan.length() - 1)
+                + "X";
     }
 
     public String maskPhone(String phone) {
@@ -23,11 +23,10 @@ public class DataMaskingService {
         }
 
         return "******" +
-            phone.substring(phone.length() - 4);
+                phone.substring(phone.length() - 4);
     }
 
     public String maskEmail(String email) {
-
         if (email == null || !email.contains("@")) {
             return "********";
         }
@@ -37,9 +36,8 @@ public class DataMaskingService {
         String username = parts[0];
 
         String visible = username.substring(
-            0,
-            Math.min(2, username.length())
-        );
+                0,
+                Math.min(2, username.length()));
 
         return visible + "*****@" + parts[1];
     }

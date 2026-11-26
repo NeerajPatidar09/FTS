@@ -38,26 +38,18 @@ package com.lost.fts.security.mfa.api;
 import com.lost.fts.security.mfa.api.request.*;
 import com.lost.fts.security.mfa.api.response.MfaSetupResponse;
 import com.lost.fts.security.mfa.application.MfaService;
+
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import com.lost.fts.security.authentication.api.response.LoginResponse;
-import com.lost.fts.security.authentication.api.request.LoginRequest;
 import com.lost.fts.security.authentication.application.AuthenticationService;
 import org.springframework.http.HttpHeaders;
-import com.lost.fts.security.mfa.api.request.*;
-import com.lost.fts.security.mfa.api.response.MfaSetupResponse;
-import com.lost.fts.security.mfa.application.MfaService;
-import jakarta.validation.Valid;
 import com.lost.fts.security.token.RefreshTokenCookieService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
 import com.lost.fts.security.authentication.api.response.LoginResult;
-import java.security.SecureRandom;
-import java.util.Base64;
 
 @RestController
 @RequestMapping("/api/v1/auth/mfa")
@@ -66,8 +58,6 @@ public class MfaController {
         private final MfaService mfaService;
         private final AuthenticationService authenticationService;
         private final RefreshTokenCookieService cookieService;
-
-        private final SecureRandom secureRandom = new SecureRandom();
 
         public MfaController(MfaService mfaService, AuthenticationService authenticationService,
                         RefreshTokenCookieService cookieService) {
@@ -95,7 +85,6 @@ public class MfaController {
         public ResponseEntity<List<String>> enable(@Valid @RequestBody MfaVerifyRequest request,
                         Authentication authentication) {
                 List<String> recoveryCodes = mfaService.enable(authentication.getName(), request.code());
-                // // System.out.println(generateChallengeToken());
                 return ResponseEntity.ok(recoveryCodes);
         }
 
@@ -120,11 +109,11 @@ public class MfaController {
 
         @PostMapping("/verify-mfa-recovery")
         public ResponseEntity<LoginResponse> verifyMfaRecovery(
-                        @Valid @RequestBody MfaRecoveryLoginRequest request) {
+                        @Valid @RequestBody MfaRecoveryLoginRequest request, HttpServletRequest httpRequest) {
 
                 LoginResult result = authenticationService.completeRecoveryLogin(
                                 request.challengeToken(),
-                                request.recoveryCode());
+                                request.recoveryCode(),httpRequest);
 
                 return ResponseEntity.ok()
                                 .header(

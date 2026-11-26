@@ -51,7 +51,7 @@ export default function CustomerTable({
 
                 <td>
                   <span className="customer-email">
-                    {customer.email}
+                    {customer.maskedEmail}
                   </span>
                 </td>
 
@@ -71,7 +71,7 @@ export default function CustomerTable({
                 No customers found.
               </td>
             </tr>
-            
+
           )}
         </tbody>
       </table>

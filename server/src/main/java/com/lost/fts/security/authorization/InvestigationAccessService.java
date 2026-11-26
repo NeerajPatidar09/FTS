@@ -1,7 +1,6 @@
 package com.lost.fts.security.authorization;
 
 import com.lost.fts.investigation.infrastructure.persistence.InvestigationRepository;
-import com.lost.fts.security.authorization.CurrentUserService;
 import com.lost.fts.user.infrastructure.persistence.User;
 import org.springframework.stereotype.Service;
 

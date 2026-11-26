@@ -96,7 +96,7 @@ public class CustomerServiceImpl implements CustomerService {
                 customer.getFullName(),
                 // maskingService.maskPan(encryptionService.decrypt(customer.getPanEncrypted())),
                 // maskingService.maskPhone(encryptionService.decrypt(customer.getPhoneEncrypted())),
-                maskingService.maskEmail(encryptionService.decrypt(customer.getEmailEncrypted())),
+                maskingService.maskEmail(customer.getEmail()),
                 customer.getStatus(),
                 customer.getCreatedAt(),
                 customer.getUpdatedAt());
