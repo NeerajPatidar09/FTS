@@ -1,7 +1,43 @@
+// package com.lost.fts.security.userdetails;
+
+// import com.lost.fts.user.infrastructure.persistence.User;
+// import com.lost.fts.user.infrastructure.persistence.UserRepository;
+// import org.springframework.security.core.userdetails.*;
+// import org.springframework.stereotype.Service;
+// import org.springframework.transaction.annotation.Transactional;
+
+// @Service
+// public class CustomUserDetailsService implements UserDetailsService {
+
+//     private final UserRepository userRepository;
+//     private String sessionReference;
+
+//     public CustomUserDetailsService(UserRepository userRepository,String sessionReference) {
+//         this.userRepository = userRepository;
+//         this.sessionReference=sessionReference;
+//     }
+
+//     @Override
+//     @Transactional(readOnly = true)
+//     public UserDetails loadUserByUsername(String username)
+//             throws UsernameNotFoundException {
+
+//         User user = userRepository
+//                 .findWithRolesAndPermissionsByUsernameIgnoreCase(username)
+//                 .orElseThrow(() -> new UsernameNotFoundException(
+//                         "User not found"));
+
+//         return new CustomUserDetails(user,sessionReference);
+//     }
+// }
+
+
+
 package com.lost.fts.security.userdetails;
 
 import com.lost.fts.user.infrastructure.persistence.User;
 import com.lost.fts.user.infrastructure.persistence.UserRepository;
+
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,8 +47,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public CustomUserDetailsService(
-            UserRepository userRepository) {
+    public CustomUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -23,8 +58,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         User user = userRepository
                 .findWithRolesAndPermissionsByUsernameIgnoreCase(username)
-                .orElseThrow(() -> new UsernameNotFoundException(
-                        "User not found"));
+                .orElseThrow(() ->
+                    new UsernameNotFoundException("User not found")
+                );
 
         return new CustomUserDetails(user);
     }

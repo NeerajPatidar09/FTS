@@ -1,6 +1,6 @@
-
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowLeft, Save } from "lucide-react";
 import {
   assignMenusToRole,
   getAllMenus,
@@ -137,27 +137,27 @@ export default function RoleMenuAssignmentPage() {
   }
 
   return (
-    <div className="menu-page">
-      <div className="menu-page-header">
+    <div className="create-page">
+      <Link to="/menus" className="back">
+        <ArrowLeft size={17} />
+        Back to Menus
+      </Link>
+      <div className="create-page-heading">
         <div>
           <h1>Role Menu Assignment</h1>
           <p>Choose which application menus each role can access.</p>
         </div>
-
-        <button
-          className="menu-secondary-button"
-          onClick={() => navigate("/menus")}
-        >
-          Back to Menus
-        </button>
       </div>
 
-      <div className="menu-form-card">
-        <div className="menu-form-section">
-          <h2>Select Role</h2>
-          <p>Choose the role for which you want to configure menus.</p>
-
-          <div className="menu-form-field">
+      <div className="create-card">
+        <div className="create-card-header">
+          <div>
+            <h2>Select Role</h2>
+            <p>Choose the role for which you want to configure menus.</p>
+          </div>
+        </div>
+        <div className="create-card-body">
+          <div className="create-field">
             <label htmlFor="assignmentRole">Role *</label>
             <select
               id="assignmentRole"
@@ -182,19 +182,20 @@ export default function RoleMenuAssignmentPage() {
           </div>
         </div>
 
-        <div className="menu-form-section">
-          <div className="assignment-heading-row">
-            <div>
-              <h2>Available Menus</h2>
-              <p>
-                Select the parent menus or individual child menus to assign.
-              </p>
+        <div className="create-card-body">
+          <div className="create-form-grid">
+            <div className="create-card-header">
+              <div>
+                <h2>Available Menus</h2>
+                <p>
+                  Select the parent menus or individual child menus to assign.
+                </p>
+              </div>
             </div>
-
-            <div className="assignment-actions">
+            <div className="create-form-main">
               <button
                 type="button"
-                className="menu-secondary-button"
+                className="create-secondary-btn"
                 onClick={handleSelectAll}
               >
                 Select All
@@ -202,7 +203,7 @@ export default function RoleMenuAssignmentPage() {
 
               <button
                 type="button"
-                className="menu-secondary-button"
+                className="create-secondary-btn"
                 onClick={handleClearAll}
               >
                 Clear All
@@ -233,10 +234,10 @@ export default function RoleMenuAssignmentPage() {
           <div className="assignment-success">{success}</div>
         )}
 
-        <div className="menu-form-actions">
+        <div className="create-form-footer">
           <button
             type="button"
-            className="menu-secondary-button"
+            className="create-reset-btn"
             onClick={() => navigate("/menus")}
             disabled={saving}
           >
@@ -245,10 +246,10 @@ export default function RoleMenuAssignmentPage() {
 
           <button
             type="button"
-            className="menu-primary-button"
+            className="create-submit-btn"
             onClick={handleSave}
             disabled={saving || !roleId}
-          >
+          > <Save size={17} />
             {saving ? "Saving..." : "Save Menu Assignment"}
           </button>
         </div>

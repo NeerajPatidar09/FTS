@@ -1,10 +1,18 @@
 package com.lost.fts.security.token.application;
 
+import com.lost.fts.common.exception.RefreshTokenReuseException;
 import com.lost.fts.security.jwt.JwtService;
+import com.lost.fts.security.session.application.DeviceService;
+import com.lost.fts.security.session.application.SessionService;
+import com.lost.fts.security.session.infrastructure.persistence.UserDevice;
+import com.lost.fts.security.session.infrastructure.persistence.UserSession;
 import com.lost.fts.security.userdetails.CustomUserDetailsService;
 import com.lost.fts.security.token.infrastructure.persistence.*;
 import com.lost.fts.user.infrastructure.persistence.User;
 import com.lost.fts.user.infrastructure.persistence.UserRepository;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -22,6 +30,8 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     private final UserRepository userRepository;
     private final CustomUserDetailsService userDetailsService;
     private final JwtService jwtService;
+    private final DeviceService deviceService;
+    private final SessionService sessionService;
 
     private final SecureRandom secureRandom = new SecureRandom();
 
@@ -35,17 +45,18 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
             RefreshTokenRepository refreshTokenRepository,
             UserRepository userRepository,
             CustomUserDetailsService userDetailsService,
-            JwtService jwtService
-    ) {
+            JwtService jwtService,DeviceService deviceService,SessionService sessionService ) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.userRepository = userRepository;
         this.userDetailsService = userDetailsService;
         this.jwtService = jwtService;
+        this.deviceService = deviceService;
+        this.sessionService = sessionService;
     }
 
     @Override
     @Transactional
-    public String createRefreshToken(Long userId) {
+    public String createRefreshToken(Long userId,UserSession session) {
 
         String rawToken = generateSecureToken();
 
@@ -53,8 +64,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         token.setUserId(userId);
         token.setTokenHash(hashToken(rawToken));
         token.setExpiresAt(
-                Instant.now().plusMillis(refreshExpiration)
-        );
+                Instant.now().plusMillis(refreshExpiration));
 
         refreshTokenRepository.save(token);
 
@@ -62,8 +72,8 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
-    @Transactional
-    public RefreshTokenPair rotateRefreshToken(String rawToken) {
+    @Transactional(noRollbackFor = RefreshTokenReuseException.class)
+    public RefreshTokenPair rotateRefreshToken(String rawToken, HttpServletRequest httpRequest) {
 
         if (rawToken == null || rawToken.isBlank()) {
             throw new IllegalArgumentException("Refresh token is required");
@@ -73,9 +83,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
         RefreshToken oldToken = refreshTokenRepository
                 .findByTokenHashForUpdate(oldHash)
-                .orElseThrow(() ->
-                        new IllegalArgumentException("Invalid refresh token")
-                );
+                .orElseThrow(() -> new IllegalArgumentException("Invalid refresh token"));
 
         if (oldToken.isRevoked()) {
             // A revoked token being reused can indicate token theft.
@@ -89,9 +97,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         }
 
         User user = userRepository.findById(oldToken.getUserId())
-                .orElseThrow(() ->
-                        new IllegalArgumentException("User not found")
-                );
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         // Adapt this check to your actual User entity status fields.
         if (!user.isEnabled()) {
@@ -106,23 +112,21 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         newToken.setUserId(user.getId());
         newToken.setTokenHash(newHash);
         newToken.setExpiresAt(
-                Instant.now().plusMillis(refreshExpiration)
-        );
+                Instant.now().plusMillis(refreshExpiration));
 
         refreshTokenRepository.save(newToken);
 
         oldToken.revoke(newHash);
 
-        UserDetails userDetails =
-                userDetailsService.loadUserByUsername(user.getUsername());
-
-        String newAccessToken = jwtService.generateToken(userDetails);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+        UserDevice device = deviceService.getOrCreateDevice(user, httpRequest);
+        UserSession session = sessionService.createSession(user,device, httpRequest);
+        String newAccessToken = jwtService.generateToken(userDetails, session.getSessionReference());
 
         return new RefreshTokenPair(
                 newAccessToken,
                 newRawToken,
-                accessExpiration / 1000
-        );
+                accessExpiration / 1000);
     }
 
     @Override
@@ -163,15 +167,13 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
 
             byte[] hash = digest.digest(
-                    token.getBytes(StandardCharsets.UTF_8)
-            );
+                    token.getBytes(StandardCharsets.UTF_8));
 
             return java.util.HexFormat.of().formatHex(hash);
 
         } catch (Exception ex) {
             throw new IllegalStateException(
-                    "Unable to hash refresh token", ex
-            );
+                    "Unable to hash refresh token", ex);
         }
     }
 }

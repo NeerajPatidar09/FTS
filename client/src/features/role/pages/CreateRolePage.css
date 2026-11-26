@@ -11,23 +11,6 @@
   color: #20232a;
 }
 
-/* Back Navigation */
-
-.create-role-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  margin-bottom: 25px;
-  color: #3978d3;
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.create-role-back:hover {
-  color: #245ba8;
-}
-
 /* Page Heading */
 
 .create-role-page-heading {

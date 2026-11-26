@@ -5,7 +5,7 @@ export interface Customer {
   firstName: string;
   lastName: string;
   fullName: string;
-  email: string;
+  maskedEmail: string;
   status: string;
 }
 

@@ -1,11 +1,12 @@
 import { useState } from "react";
 import type { FormEvent, ChangeEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {ArrowLeft, ShieldCheck, Save, RotateCcw, LoaderCircle, Info,} from "lucide-react";
-import {createRole, getAllRoles, updateRolePermissions,} from "../api/roleApi";
+import { ArrowLeft, ShieldCheck, Save, RotateCcw, LoaderCircle, Info, } from "lucide-react";
+import { createRole, getAllRoles, updateRolePermissions, } from "../api/roleApi";
 import type { CreateRoleRequest } from "../types/role.types";
 import RolePermissionSelector from "../components/RolePermissionSelector";
 import "./CreateRolePage.css";
+import "../../../global.css";
 
 export default function CreateRolePage() {
 
@@ -144,7 +145,7 @@ export default function CreateRolePage() {
 
       {/* Back navigation */}
 
-      <Link to="/roles" className="create-role-back">
+      <Link to="/roles" className="back">
         <ArrowLeft size={17} />
         Back to Roles
       </Link>

@@ -5,17 +5,16 @@ import com.lost.fts.security.authentication.api.response.LoginResponse;
 import com.lost.fts.security.authentication.application.AuthenticationService;
 import com.lost.fts.security.authentication.api.response.RefreshResponse;
 import com.lost.fts.security.mfa.api.request.MfaLoginRequest;
+
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import com.lost.fts.user.infrastructure.persistence.UserRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import com.lost.fts.user.infrastructure.persistence.User;
 import com.lost.fts.security.token.RefreshTokenCookieService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
-import com.lost.fts.security.authentication.api.response.UserContextResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import com.lost.fts.security.authentication.api.response.LoginResult;
 import com.lost.fts.security.token.application.RefreshTokenPair;
@@ -47,9 +46,9 @@ public class AuthController {
         // }
 
         @PostMapping("/login")
-        public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
+        public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request, HttpServletRequest httpRequest) {
 
-                LoginResult result = authenticationService.login(request);
+                LoginResult result = authenticationService.login(request, httpRequest);
 
                 if (result.mfaRequired()) {
                         return ResponseEntity.ok(new MfaChallengeResponse(true, result.challengeToken(), 300,
@@ -63,8 +62,11 @@ public class AuthController {
         }
 
         @PostMapping("/verify-mfa")
-        public ResponseEntity<LoginResponse> verifyMfa(@Valid @RequestBody MfaLoginRequest request) {
-                LoginResult result = authenticationService.completeMfaLogin(request.challengeToken(), request.code());
+        public ResponseEntity<LoginResponse> verifyMfa(@Valid @RequestBody MfaLoginRequest request,
+                        HttpServletRequest httpRequest) {
+                LoginResult result = authenticationService.completeMfaLogin(request.challengeToken(), request.code(),
+                                httpRequest);
+                
                 return ResponseEntity.ok()
                                 .header(HttpHeaders.SET_COOKIE,
                                                 cookieService.createCookie(result.refreshToken()).toString())
@@ -72,8 +74,9 @@ public class AuthController {
         }
 
         @PostMapping("/refresh")
-        public ResponseEntity<?> refresh(@CookieValue(name = "refreshToken", required = false) String refreshToken) {
-                RefreshTokenPair pair = refreshTokenService.rotateRefreshToken(refreshToken);
+        public ResponseEntity<?> refresh(@CookieValue(name = "refreshToken", required = false) String refreshToken,
+                        HttpServletRequest httpRequest) {
+                RefreshTokenPair pair = refreshTokenService.rotateRefreshToken(refreshToken, httpRequest);
 
                 return ResponseEntity.ok()
                                 .header(HttpHeaders.SET_COOKIE,
@@ -97,9 +100,7 @@ public class AuthController {
         @PostMapping("/logout-all")
         @PreAuthorize("isAuthenticated()")
         public ResponseEntity<Void> logoutAll(Authentication authentication) {
-                // System.out.println(authentication.getName());
                 User user = userRepository.findByUsernameIgnoreCase(authentication.getName()).orElseThrow();
-                // System.out.println("user id :::::::: " + user.getId());
                 refreshTokenService.revokeAllUserTokens(user.getId());
 
                 return ResponseEntity.noContent()
@@ -110,10 +111,11 @@ public class AuthController {
         }
 
         @PostMapping("/verify-mfa-recovery")
-        public ResponseEntity<LoginResponse> verifyMfaRecovery(@Valid @RequestBody MfaRecoveryLoginRequest request) {
+        public ResponseEntity<LoginResponse> verifyMfaRecovery(@Valid @RequestBody MfaRecoveryLoginRequest request,
+                        HttpServletRequest httpRequest) {
 
                 LoginResult result = authenticationService.completeRecoveryLogin(request.challengeToken(),
-                                request.recoveryCode());
+                                request.recoveryCode(), httpRequest);
                 return ResponseEntity.ok()
                                 .header(HttpHeaders.SET_COOKIE,
                                                 cookieService.createCookie(result.refreshToken()).toString())
