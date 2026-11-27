@@ -7,7 +7,7 @@ import java.util.Locale;
 
 import com.lost.fts.account.infrastructure.persistence.AccountEntity;
 import com.lost.fts.beneficiary.infrastructure.persistence.BeneficiaryEntity;
-import com.lost.fts.customer.infrastructure.persistence.CustomerDeviceEntity;
+import com.lost.fts.customerdevice.infrastructure.persistence.CustomerDeviceEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -14,6 +14,7 @@ import com.lost.fts.account.infrastructure.persistence.AccountEntity;
 import com.lost.fts.account.infrastructure.persistence.AccountRepository;
 import com.lost.fts.customer.infrastructure.persistence.CustomerEntity;
 import com.lost.fts.customer.infrastructure.persistence.CustomerRepository;
+import com.lost.fts.security.encryption.DataMaskingService;
 
 @Service
 @Transactional(readOnly = true)
@@ -21,12 +22,14 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
     private final CustomerRepository customerRepository;
+    private final DataMaskingService maskingService;
 
     public AccountServiceImpl(
             AccountRepository accountRepository,
-            CustomerRepository customerRepository) {
+            CustomerRepository customerRepository, DataMaskingService maskingService) {
         this.accountRepository = accountRepository;
         this.customerRepository = customerRepository;
+        this.maskingService = maskingService;
     }
 
     @Override
@@ -39,17 +42,15 @@ public class AccountServiceImpl implements AccountService {
 
         if (accountRepository.existsByAccountRef(accountRef)) {
             throw new ResponseStatusException(
-                HttpStatus.CONFLICT,
-                "Account reference already exists: " + accountRef
-            );
+                    HttpStatus.CONFLICT,
+                    "Account reference already exists: " + accountRef);
         }
 
         CustomerEntity customer = customerRepository
-            .findByCustomerRef(customerRef)
-            .orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "Customer not found: " + customerRef
-            ));
+                .findByCustomerRef(customerRef)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Customer not found: " + customerRef));
 
         AccountEntity account = new AccountEntity();
         account.setAccountRef(accountRef);
@@ -67,11 +68,10 @@ public class AccountServiceImpl implements AccountService {
     public AccountResponse getAccountByRef(String accountRef) {
 
         AccountEntity account = accountRepository
-            .findByAccountRef(accountRef.trim())
-            .orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "Account not found: " + accountRef
-            ));
+                .findByAccountRef(accountRef.trim())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Account not found: " + accountRef));
 
         return toResponse(account);
     }
@@ -80,40 +80,39 @@ public class AccountServiceImpl implements AccountService {
     public List<AccountResponse> getAccountsByCustomerRef(String customerRef) {
 
         CustomerEntity customer = customerRepository
-            .findByCustomerRef(customerRef.trim())
-            .orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "Customer not found: " + customerRef
-            ));
+                .findByCustomerRef(customerRef.trim())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Customer not found: " + customerRef));
 
         return accountRepository.findByCustomerId(customer.getId())
-            .stream()
-            .map(this::toResponse)
-            .toList();
+                .stream()
+                .map(this::toResponse)
+                .toList();
     }
 
     @Override
     public List<AccountResponse> getAllAccounts() {
 
         return accountRepository.findAll()
-            .stream()
-            .map(this::toResponse)
-            .toList();
+                .stream()
+                .map(this::toResponse)
+                .toList();
     }
 
     private AccountResponse toResponse(AccountEntity account) {
 
         return new AccountResponse(
-            account.getId(),
-            account.getAccountRef(),
-            account.getCustomer().getCustomerRef(),
-            account.getAccountType(),
-            account.getStatus(),
-            account.getCurrency(),
-            account.getOpenedOn(),
-            account.getClosedOn(),
-            account.getCreatedAt(),
-            account.getUpdatedAt()
-        );
+                account.getId(),
+                maskingService.maskAccount(account.getAccountRef()),
+                // account.getAccountRef(),
+                account.getCustomer().getCustomerRef(),
+                account.getAccountType(),
+                account.getStatus(),
+                account.getCurrency(),
+                account.getOpenedOn(),
+                account.getClosedOn(),
+                account.getCreatedAt(),
+                account.getUpdatedAt());
     }
 }

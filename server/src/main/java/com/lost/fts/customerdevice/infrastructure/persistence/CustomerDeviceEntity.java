@@ -1,7 +1,8 @@
-package com.lost.fts.customer.infrastructure.persistence;
+package com.lost.fts.customerdevice.infrastructure.persistence;
 
 import java.time.Instant;
 
+import com.lost.fts.customer.infrastructure.persistence.CustomerEntity;
 import com.lost.fts.device.infrastructure.persistence.DeviceEntity;
 
 import jakarta.persistence.Column;

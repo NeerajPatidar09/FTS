@@ -1,4 +1,4 @@
-package com.lost.fts.customer.infrastructure.persistence;
+package com.lost.fts.customerdevice.infrastructure.persistence;
 
 public enum CustomerDeviceStatus {
     REGISTERED,
