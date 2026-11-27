@@ -30,11 +30,8 @@ public class AccountController {
     }
 
     @PostMapping
-    public ResponseEntity<AccountResponse> createAccount(
-            @Valid @RequestBody AccountCreateRequest request) {
-
+    public ResponseEntity<AccountResponse> createAccount(@Valid @RequestBody AccountCreateRequest request) {
         AccountResponse response = accountService.createAccount(request);
-
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(response);
@@ -43,7 +40,6 @@ public class AccountController {
     @GetMapping("/{accountRef}")
     public ResponseEntity<AccountResponse> getAccountByRef(
             @PathVariable String accountRef) {
-
         return ResponseEntity.ok(
             accountService.getAccountByRef(accountRef)
         );
@@ -51,7 +47,6 @@ public class AccountController {
 
     @GetMapping
     public ResponseEntity<List<AccountResponse>> getAllAccounts() {
-
         return ResponseEntity.ok(accountService.getAllAccounts());
     }
 

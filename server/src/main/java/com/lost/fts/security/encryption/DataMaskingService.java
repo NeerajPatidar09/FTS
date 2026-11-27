@@ -26,6 +26,16 @@ public class DataMaskingService {
                 phone.substring(phone.length() - 4);
     }
 
+    public String maskAccount(String account) {
+
+        if (account == null || account.length() < 4) {
+            return "********";
+        }
+
+        return "*********" +
+                account.substring(account.length() - 4);
+    }
+
     public String maskEmail(String email) {
         if (email == null || !email.contains("@")) {
             return "********";

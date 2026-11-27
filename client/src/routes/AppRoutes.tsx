@@ -24,6 +24,7 @@ import DepartmentFormPage from "../features/department/pages/DepartmentFormPage"
 import MenuListPage from "../features/menu/pages/MenuListPage";
 import CreateMenuPage from "../features/menu/pages/CreateMenuPage";
 import RoleMenuAssignmentPage from "../features/menu/pages/RoleMenuAssignmentPage";
+import AccountListPage from "../features/account/pages/AccountListPage";
 
 export default function AppRoutes() {
 
@@ -162,14 +163,14 @@ export default function AppRoutes() {
           {/* Role Management */}
 
           <Route element={
-            <PermissionRoute permissions={["ROLE_VIEW"]} />
+            <PermissionRoute permissions={["ROLES_VIEW"]} />
           }>
             <Route
               path="/roles"
               element={<RoleListPage />}
             />
           </Route>
-          <Route element={<PermissionRoute permissions={["ROLE_CREATE"]} />}>
+          <Route element={<PermissionRoute permissions={["ROLES_CREATE"]} />}>
             <Route
               path="/roles/create"
               element={<CreateRolePage />}
@@ -208,6 +209,13 @@ export default function AppRoutes() {
             />
           </Route> */}
 
+          <Route element={
+            <PermissionRoute permissions={["ACCOUNT_VIEW"]} />
+          }>
+            <Route
+              path="/accounts"
+              element={<AccountListPage />}
+            /></Route>
 
           {/* Menu Management */}
 

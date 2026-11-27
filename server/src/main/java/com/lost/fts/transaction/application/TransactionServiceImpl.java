@@ -12,8 +12,8 @@ import com.lost.fts.account.infrastructure.persistence.AccountEntity;
 import com.lost.fts.account.infrastructure.persistence.AccountRepository;
 import com.lost.fts.beneficiary.infrastructure.persistence.BeneficiaryEntity;
 import com.lost.fts.beneficiary.infrastructure.persistence.BeneficiaryRepository;
-import com.lost.fts.customer.infrastructure.persistence.CustomerDeviceEntity;
-import com.lost.fts.device.infrastructure.persistence.CustomerDeviceRepository;
+import com.lost.fts.customerdevice.infrastructure.persistence.CustomerDeviceEntity;
+import com.lost.fts.customerdevice.infrastructure.persistence.CustomerDeviceRepository;
 import com.lost.fts.messaging.infrastructure.persistence.OutboxEventEntity;
 import com.lost.fts.messaging.infrastructure.persistence.OutboxEventRepository;
 import com.lost.fts.transaction.api.dto.TransactionCreateRequest;
@@ -22,6 +22,7 @@ import com.lost.fts.transaction.api.dto.TransactionResponse;
 import com.lost.fts.transaction.infrastructure.persistence.TransactionEntity;
 import com.lost.fts.transaction.infrastructure.persistence.TransactionRepository;
 
+import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
 @Service
@@ -39,8 +40,10 @@ public class TransactionServiceImpl implements TransactionService {
     private final ObjectMapper objectMapper;
 
     public TransactionServiceImpl(
-        TransactionRepository transactionRepository,AccountRepository accountRepository,BeneficiaryRepository beneficiaryRepository,
-        CustomerDeviceRepository customerDeviceRepository,OutboxEventRepository outboxEventRepository,ObjectMapper objectMapper) {
+            TransactionRepository transactionRepository, AccountRepository accountRepository,
+            BeneficiaryRepository beneficiaryRepository,
+            CustomerDeviceRepository customerDeviceRepository, OutboxEventRepository outboxEventRepository,
+            ObjectMapper objectMapper) {
 
         this.transactionRepository = transactionRepository;
         this.accountRepository = accountRepository;
@@ -68,10 +71,11 @@ public class TransactionServiceImpl implements TransactionService {
                 TransactionEntity transaction = existing.get();
 
                 if (!matchesExisting(transaction, request)) {
-                    throw new ResponseStatusException(HttpStatus.CONFLICT,"External transaction reference was reused with different transaction data");
+                    throw new ResponseStatusException(HttpStatus.CONFLICT,
+                            "External transaction reference was reused with different transaction data");
                 }
 
-                return new TransactionCreateResult(TransactionResponse.from(transaction),true);
+                return new TransactionCreateResult(TransactionResponse.from(transaction), true);
             }
         }
 
@@ -90,14 +94,16 @@ public class TransactionServiceImpl implements TransactionService {
         AccountEntity sourceAccount = findAccountOrNull(sourceRef, "Source account");
         AccountEntity destinationAccount = findAccountOrNull(destinationRef, "Destination account");
 
-        if (sourceAccount != null && destinationAccount != null && sourceAccount.getId().equals(destinationAccount.getId())) {
+        if (sourceAccount != null && destinationAccount != null
+                && sourceAccount.getId().equals(destinationAccount.getId())) {
             throw badRequest("Source and destination accounts must be different");
         }
 
         BeneficiaryEntity beneficiary = null;
 
         if (beneficiaryRef != null) {
-            beneficiary = beneficiaryRepository.findByBeneficiaryRef(beneficiaryRef).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Beneficiary not found"));
+            beneficiary = beneficiaryRepository.findByBeneficiaryRef(beneficiaryRef)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Beneficiary not found"));
 
             if (!beneficiary.getAccount().getId().equals(sourceAccount.getId())) {
                 throw badRequest("Beneficiary does not belong to the source account");
@@ -107,8 +113,9 @@ public class TransactionServiceImpl implements TransactionService {
         CustomerDeviceEntity customerDevice = null;
 
         if (request.customerDeviceId() != null) {
-            customerDevice = customerDeviceRepository.findById(request.customerDeviceId()).orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,"Customer-device association not found"));
+            customerDevice = customerDeviceRepository.findById(request.customerDeviceId())
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "Customer-device association not found"));
 
             if (!customerDevice.getCustomer().getId().equals(sourceAccount.getCustomer().getId())) {
                 throw badRequest("Device association does not belong to the source account holder");
@@ -118,11 +125,11 @@ public class TransactionServiceImpl implements TransactionService {
         String transactionRef = "TXN-" + UUID.randomUUID().toString().replace("-", "");
 
         TransactionEntity transaction = new TransactionEntity(
-                transactionRef,sourceAccount,destinationAccount,beneficiary,customerDevice,sourceSystem,externalRef,
-                request.transactionType(),request.channel(),request.amount(),request.currency(),
-                normalize(request.counterpartyReferenceToken()),normalize(request.counterpartyMasked()),
-                request.occurredAt()
-        );
+                transactionRef, sourceAccount, destinationAccount, beneficiary, customerDevice, sourceSystem,
+                externalRef,
+                request.transactionType(), request.channel(), request.amount(), request.currency(),
+                normalize(request.counterpartyReferenceToken()), normalize(request.counterpartyMasked()),
+                request.occurredAt());
 
         TransactionEntity saved = transactionRepository.save(transaction);
 
@@ -131,14 +138,15 @@ public class TransactionServiceImpl implements TransactionService {
          * A separate publisher will send committed outbox events to Kafka.
          */
         String eventId = UUID.randomUUID().toString();
-
         TransactionReceivedEvent event = new TransactionReceivedEvent(
-                eventId,EVENTTYPE,saved.getId(),saved.getTransactionRef(),
+                eventId, EVENTTYPE, saved.getId(), saved.getTransactionRef(),
                 sourceAccount == null ? null : sourceAccount.getId(),
                 destinationAccount == null
-                        ? null : destinationAccount.getId(),
-                saved.getAmount(), saved.getCurrency(), saved.getTransactionType(), saved.getChannel(), saved.getOccurredAt()
-        );
+                        ? null
+                        : destinationAccount.getId(),
+                saved.getAmount(), saved.getCurrency(), saved.getTransactionType(), saved.getChannel(),
+                saved.getOccurredAt());
+        JsonNode payload = objectMapper.valueToTree(event);
 
         OutboxEventEntity outboxEvent = new OutboxEventEntity(
                 eventId,
@@ -146,16 +154,14 @@ public class TransactionServiceImpl implements TransactionService {
                 "TRANSACTION",
                 saved.getTransactionRef(),
                 EVENTTYPE,
-                objectMapper.valueToTree(event),
-                Instant.now()
-        );
+                payload,
+                Instant.now());
 
         outboxEventRepository.save(outboxEvent);
 
         return new TransactionCreateResult(
                 TransactionResponse.from(saved),
-                false
-        );
+                false);
     }
 
     @Override
@@ -170,20 +176,19 @@ public class TransactionServiceImpl implements TransactionService {
                 .findByTransactionRef(transactionRef.trim())
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "Transaction not found"
-                ));
+                        "Transaction not found"));
 
         return TransactionResponse.from(transaction);
     }
 
-    private AccountEntity findAccountOrNull(String accountRef,String description) {
+    private AccountEntity findAccountOrNull(String accountRef, String description) {
 
         if (accountRef == null) {
             return null;
         }
 
         return accountRepository.findByAccountRef(accountRef).orElseThrow(() -> new ResponseStatusException(
-            HttpStatus.NOT_FOUND,description + " not found"));
+                HttpStatus.NOT_FOUND, description + " not found"));
     }
 
     private boolean matchesExisting(

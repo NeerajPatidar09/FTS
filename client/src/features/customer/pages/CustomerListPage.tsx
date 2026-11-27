@@ -89,7 +89,7 @@ const successMessage = location.state?.successMessage as
         customer.firstName,
         customer.lastName,
         customer.fullName,
-        customer.email,
+        customer.maskedEmail,
         customer.status,
       ].some((value) =>
         (value ?? "").toLowerCase().includes(keyword)

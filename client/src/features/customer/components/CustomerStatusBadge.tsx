@@ -1,4 +1,3 @@
-
 interface CustomerStatusBadgeProps {
   status: string;
 }
