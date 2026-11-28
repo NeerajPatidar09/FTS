@@ -17,12 +17,12 @@ import com.lost.fts.device.infrastructure.persistence.DeviceRepository;
 
 @Service
 @Transactional
-public class DeviceServiceImpl implements DeviceService {
+public class DevicesServiceImpl implements DevicesService {
 
     private final DeviceRepository deviceRepository;
     private final DeviceMapper deviceMapper;
 
-    public DeviceServiceImpl(
+    public DevicesServiceImpl(
             DeviceRepository deviceRepository,
             DeviceMapper deviceMapper) {
 

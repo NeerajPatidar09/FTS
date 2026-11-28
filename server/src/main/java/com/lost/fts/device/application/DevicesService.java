@@ -8,7 +8,7 @@ import com.lost.fts.device.api.request.DeviceUpdateRequest;
 import com.lost.fts.device.api.response.DeviceResponse;
 import com.lost.fts.device.infrastructure.persistence.DevicePlatform;
 
-public interface DeviceService {
+public interface DevicesService {
 
     DeviceResponse create(DeviceCreateRequest request);
 
