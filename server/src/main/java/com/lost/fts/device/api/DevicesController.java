@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import com.lost.fts.device.api.request.DeviceCreateRequest;
 import com.lost.fts.device.api.request.DeviceUpdateRequest;
 import com.lost.fts.device.api.response.DeviceResponse;
-import com.lost.fts.device.application.DeviceService;
+import com.lost.fts.device.application.DevicesService;
 import com.lost.fts.device.infrastructure.persistence.DevicePlatform;
 
 import jakarta.validation.Valid;
@@ -21,11 +21,11 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/v1/devices")
 @Validated
-public class DeviceController {
+public class DevicesController {
 
-    private final DeviceService deviceService;
+    private final DevicesService deviceService;
 
-    public DeviceController(DeviceService deviceService) {
+    public DevicesController(DevicesService deviceService) {
         this.deviceService = deviceService;
     }
 
